@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Lightbox - Vanilla JS Tests</title>
+	<meta charset="UTF-8">
+	<meta name="viewport"
+			content="width=device-width, user-scalable=no,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
+	<link href="vanilla.min.css" rel="stylesheet" type="text/css"/>
+	<link href="menu.css" rel="stylesheet" type="text/css"/>
+	<script type="text/javascript" src="menu.js"></script>
+	<script type="text/javascript" src="vanilla-js.min.js"></script>
+</head>
+<body>
+
+<header>
+	<script>writeResponsiveMenu()</script>
+</header>
+
+<style>
+	/*
+	 * Suggested CSS, not strictly needed for working, its just for theming
+	 */
+	.lightbox-modal {
+		color: #fff;
+	}
+
+	.lightbox-close,
+	.lightbox-prev,
+	.lightbox-next {
+		background: rgba(255, 255, 255, 0.01);
+		padding: 2rem;
+	}
+
+	.lightbox-modal figure {
+		position: relative;
+	}
+
+	.lightbox-modal img {
+		position: relative;
+	}
+
+	.lightbox-modal figcaption {
+		color: #fff;
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		padding: 1rem;
+		background: rgba(0, 0, 0, 0.4);
+		text-align: center;
+	}
+
+	.lightbox-modal figcaption:empty {
+		display: none
+	}
+
+
+</style>
+
+<div class="container container-small">
+
+	<h1>Lightbox</h1>
+
+	<h2>Gallery Mode</h2>
+
+	<div class="grid grid-auto grid-gutter gallery1">
+		<div class="cell">
+			<a href="https://source.unsplash.com/E_eWwM29wfU/800x600" title="Foto 1"><img
+					src="https://source.unsplash.com/E_eWwM29wfU/400x300"></a>
+		</div>
+		<div class="cell">
+			<a href="https://source.unsplash.com/_UIN-pFfJ7c/800x600"><img
+					src="https://source.unsplash.com/_UIN-pFfJ7c/400x300" alt="Foto 2"></a>
+		</div>
+		<div class="cell">
+			<a href="https://source.unsplash.com/MsMISAIe8Qw/800x600"><img
+					src="https://source.unsplash.com/MsMISAIe8Qw/400x300" title="Foto 3"></a>
+		</div>
+	</div>
+
+	<h2>Single Mode</h2>
+
+	<div class="grid grid-auto grid-gutter gallery2">
+		<div class="cell">
+			<a href="https://source.unsplash.com/layMbSJ3YOE/800x600" title="Foto 1"><img
+					src="https://source.unsplash.com/layMbSJ3YOE/400x300"></a>
+		</div>
+		<div class="cell">
+			<a href="https://source.unsplash.com/IocJwyqRv3M/800x600"><img
+					src="https://source.unsplash.com/IocJwyqRv3M/400x300" alt="Foto 2"></a>
+		</div>
+		<div class="cell">
+			<a href="https://source.unsplash.com/NiyRORf8d8I/800x600"><img
+					src="https://source.unsplash.com/NiyRORf8d8I/400x300" title="Foto 3"></a>
+		</div>
+	</div>
+</div>
+
+<script>
+
+	onPageReady(function () {
+
+		// Gallery Mode
+		var l1 = new $lightbox('.gallery1', 'a');
+
+		// Singley Mode
+		var l2 = new $lightbox('.gallery2 a');
+
+	});
+
+</script>
+
+
+</body>
+</html>

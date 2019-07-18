@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Basic JS - Vanilla JS Tests</title>
+	<meta charset="UTF-8">
+	<meta name="viewport"
+			content="width=device-width, user-scalable=no,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
+	<link href="vanilla.min.css" rel="stylesheet" type="text/css"/>
+	<link href="menu.css" rel="stylesheet" type="text/css"/>
+	<script type="text/javascript" src="menu.js"></script>
+
+</head>
+<body class="test">
+<header>
+	<script>writeResponsiveMenu()</script>
+</header>
+
+<div class="container-small fluid">
+
+	<h1>Basic JS</h1>
+
+	<h2>Querying the dom</h2>
+	<p><code>core.js</code> provides some sample wrapper upon vanilla JS functions.</p>
+	<pre>
+var singleHTMLElement = $('#signle-element');
+var multipleNodeList = $all('#gallery a');</pre>
+
+	<h2>Dom Ready</h2>
+	<p>You can use <code>onPageReady(cb)</code> in place of Jquery document ready.</p>
+
+	<h2>Swipe</h2>
+	<pre>$detectSwipe(el, callback, treshold);</pre>
+	<p>It can be usefull to handle simple swipe case, callback will receive two parameters: 1) direction of the swipe (left, right, up, down); 2) the last touchend event;</p>
+
+	<h2>Trigger Event</h2>
+	<pre>$triggerEvent(el, stEventName);</pre>
+	<p>Accept an element as string (and it will query the DOM for your) or an HTMLelement. The event name can be a standard one or a new custom one will be generated.</p>
+
+	<h2>Listen on multiple elements</h2>
+	<pre>$on(parentSelector, eventName, callback);</pre>
+	<p>Will execute <code>$all(...)</code> and then it will add the listenr to all the matching elements.</p>
+
+</div>
+</body>
+</html>
