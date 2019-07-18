@@ -268,9 +268,6 @@ function $lightbox(mainSelector, childSelector) {
 		// Hide previous modal
 		self.hide();
 
-		// Prevent screen scrolling
-		$disableScreenScrolling();
-
 		// Show Image
 		self.switchImage(index);
 
@@ -294,6 +291,8 @@ function $lightbox(mainSelector, childSelector) {
 			$show(self.modalNext);
 		}
 
+		// Prevent screen scrolling
+		$disableScreenScrolling();
 	};
 
 

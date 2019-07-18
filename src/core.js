@@ -112,9 +112,14 @@ function $append(htmlString) {
  * https://css-tricks.com/prevent-page-scrolling-when-a-modal-is-open/
  */
 function $disableScreenScrolling() {
+	var documentWidth = document.documentElement.clientWidth;
+	var windowWidth = window.innerWidth;
+	var scrollBarWidth = windowWidth - documentWidth;
+
 	document.body.style.height = '100vh';
 	document.body.style.overflow = 'hidden';
 	document.body.style.position = 'fixed';
+	document.body.style.paddingRight =  scrollBarWidth+'px';
 }
 
 /**
@@ -124,6 +129,7 @@ function $restoreScreenScrolling() {
 	document.body.style.height = 'initial';
 	document.body.style.overflow = 'initial';
 	document.body.style.position = 'initial';
+	document.body.style.paddingRight = 'initial';
 }
 
 
