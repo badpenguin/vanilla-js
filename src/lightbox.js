@@ -397,7 +397,6 @@ function $lightbox(mainSelector, childSelector) {
 
 	});
 
-	return {
-		images: self.images
-	};
+	// We don't have a public interface yet
+	return {};
 }

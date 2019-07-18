@@ -31,19 +31,23 @@
 		padding: 2rem;
 		line-height: 1;
 	}
+
 	@media (max-width: 480px), (max-height: 480px) {
 		.lightbox-close,
 		.lightbox-prev,
 		.lightbox-next {
 			padding: 0;
 		}
+
 		.lightbox-close {
 			top: 0 !important;
 			right: 2px !important;
 		}
+
 		.lightbox-next {
 			right: 0 !important;
 		}
+
 		.lightbox-prev {
 			left: 0 !important;
 		}
@@ -114,22 +118,32 @@
 	</div>
 
 	<h2>How it Works</h2>
+
 	<p>In single mode you can just watch a single photo, any mouse or keyboard event will close the modal</p>
 	<p>In gallery mode you can just watch multiple photo, starting from the one you clicked.</p>
 	<p>You can navigate with keyboard (arrow left, arrow right, space or escape) or swipe or clicking the image.</p>
 	<p>Going past the last photo or before the first one then it will close the modal.</p>
 	<p>Swiping up or down will close too.</p>
 	<p>Keyboard escape also closes the modal.</p>
+
 	<h2>Using with Wordpress</h2>
-	<p>To have one lightbox for all the clickable gallery and images of the page</p>
+
+	<p>To have one lightbox for all the clickable gallery and images of the page:</p>
 	<pre>$lightbox('.wp-block-gallery,.wp-block-image', 'a');</pre>
-	<p>To have a single lightbox for each one, please assign an "id", or a unique class to every element</p>
+
+	<p>To have a single lightbox for each one, please assign an "id", or a unique class to every element:</p>
 	<pre>
 $all('.wp-block-image,.wp-block-gallery').forEach(function (v, i) {
 	var name = 'lightbox-instance-' + i;
 	v.id = name;
 	el = $lightbox('#' + name, 'a');
 });</pre>
+
+	<h2>Using with other</h2>
+	<p>The script detected the URL to open as modal looking the the attributes: <code>data-src, href, src</code></p>
+	<p>Captions are detected looking at the attributes: <code>data-title, title, alt</code></p>
+	<p>This way, adding data-src, you can use it with single images without wrapping with an anchor:</p>
+	<pre>$lightbox('IMG.lightbox');</pre>
 
 </div>
 
