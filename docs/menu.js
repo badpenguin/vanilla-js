@@ -6,7 +6,7 @@ var menu = [
 
 
 function writeResponsiveMenu() {
-	document.write('<div class="container-large"><nav class="navbar navbar-toggle-on-small"><div class="navbar-logo"><h2><a href="/">Vanilla JS</a></h2></div><ul class="navbar-menu scrollable flex-center navbar-menu-left">');
+	document.write('<div class="container-large"><nav class="navbar navbar-toggle-on-small"><div class="navbar-logo"><h2><a href="index.html">Vanilla JS</a></h2></div><ul class="navbar-menu scrollable flex-center navbar-menu-left">');
 
 	[].forEach.call(menu, function (item) {
 		document.write('<li class="' + item[2] + '"><a href="' + item[0] + '">' + item[1] + '</a></li>');
