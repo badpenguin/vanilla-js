@@ -19,7 +19,6 @@ function onPageReady(callback) {
 		console.debug('onPageReady already completed, firing callback...');
 		callback();
 	}
-	console.debug('queuing onPageReady CB', document.readyState);
 	document.addEventListener('DOMContentLoaded', callback);
 }
 
@@ -33,7 +32,6 @@ function onPageLoad(callback) {
 		console.debug('onPageReady already completed, firing callback...');
 		callback();
 	}
-	console.debug('queuing onPageLoad CB', document.readyState);
 	window.addEventListener('load', callback);
 }
 
