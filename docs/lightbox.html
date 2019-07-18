@@ -104,15 +104,15 @@
 
 	<div class="grid grid-auto grid-gutter gallery2">
 		<div class="cell">
-			<a href="https://source.unsplash.com/layMbSJ3YOE/800x600" title="Foto 1"><img
+			<a id="foto1" href="https://source.unsplash.com/layMbSJ3YOE/800x600" title="Foto 1"><img
 					src="https://source.unsplash.com/layMbSJ3YOE/400x300"></a>
 		</div>
 		<div class="cell">
-			<a href="https://source.unsplash.com/IocJwyqRv3M/800x600"><img
+			<a id="foto2" href="https://source.unsplash.com/IocJwyqRv3M/800x600"><img
 					src="https://source.unsplash.com/IocJwyqRv3M/400x300" alt="Foto 2"></a>
 		</div>
 		<div class="cell">
-			<a href="https://source.unsplash.com/NiyRORf8d8I/800x600"><img
+			<a id="foto3" href="https://source.unsplash.com/NiyRORf8d8I/800x600"><img
 					src="https://source.unsplash.com/NiyRORf8d8I/400x300" title="Foto 3"></a>
 		</div>
 	</div>
@@ -152,10 +152,12 @@ $all('.wp-block-image,.wp-block-gallery').forEach(function (v, i) {
 	onPageReady(function () {
 
 		// Gallery Mode
-		var l1 = new $lightbox('.gallery1', 'a');
+		$lightbox('.gallery1', 'a');
 
 		// Singley Mode
-		var l2 = new $lightbox('.gallery2 a');
+		$lightbox('#foto1');
+		$lightbox('#foto2');
+		$lightbox('#foto3');
 
 	});
 
