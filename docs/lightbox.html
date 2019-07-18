@@ -32,7 +32,7 @@
 		padding: 2rem;
 		line-height: 1;
 	}
-	@media (max-width: 480px) {
+	@media (max-width: 480px), (max-height: 480px) {
 		.lightbox-close,
 		.lightbox-prev,
 		.lightbox-next {
@@ -40,7 +40,7 @@
 		}
 		.lightbox-close {
 			top: 0 !important;
-			right: 0 !important;
+			right: 2px !important;
 		}
 		.lightbox-next {
 			right: 0 !important;
@@ -65,7 +65,7 @@
 		left: 0;
 		right: 0;
 		padding: 1rem;
-		background: rgba(0, 0, 0, 0.4);
+		background: rgba(0, 0, 0, 0.3);
 		text-align: center;
 	}
 
