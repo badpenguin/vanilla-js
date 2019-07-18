@@ -120,6 +120,16 @@
 	<p>Going past the last photo or before the first one then it will close the modal.</p>
 	<p>Swiping up or down will close too.</p>
 	<p>Keyboard escape also closes the modal.</p>
+	<h2>Using with Wordpress</h2>
+	<p>To have one lightbox for all the clickable gallery and images of the page</p>
+	<pre>$lightbox('.wp-block-gallery,.wp-block-image', 'a');</pre>
+	<p>To have a single lightbox for each one, please assign an "id", or a unique class to every element</p>
+	<pre>
+$all('.wp-block-image,.wp-block-gallery').forEach(function (v, i) {
+	var name = 'lightbox-instance-' + i;
+	v.id = name;
+	el = $lightbox('#' + name, 'a');
+});</pre>
 
 </div>
 

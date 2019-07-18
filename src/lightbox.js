@@ -2,7 +2,7 @@ var lightboxInstanceCount = 0;
 
 function $lightbox(mainSelector, childSelector) {
 
-	var self = this;
+	var self = {};
 
 	// semaphore
 	self.initialized = false;
@@ -42,7 +42,7 @@ function $lightbox(mainSelector, childSelector) {
 			'</div>');
 
 		// Cache HTMLElements
-		self.modal = $('#'+modalId);
+		self.modal = $('#' + modalId);
 		self.modalImage = $find(self.modal, 'img').first();
 		self.modalCaption = $find(self.modal, 'figcaption').first();
 		var closeButton = $find(self.modal, '.lightbox-close').first();
@@ -200,23 +200,20 @@ function $lightbox(mainSelector, childSelector) {
 	 */
 	self.checkImages = function () {
 
-		if (childSelector) {
-			// Gallery Mode
-			var target = $(mainSelector);
-			$find(target, childSelector).forEach(function (el) {
-				self.scanElement(el);
-			});
-			// Switch to single mode if only one
-			if (self.images.length === 1) {
-				self.singleMode = true;
+		$all(mainSelector).forEach(function (target) {
+			if (childSelector) {
+				$find(target, childSelector).forEach(function (el) {
+					self.scanElement(el);
+				});
+			} else {
+				self.scanElement(target);
 			}
-		} else {
-			// Single mode (but we still manage it as an array, just not allowing next/prev)
-			$all(mainSelector).forEach(function (el) {
-				self.scanElement(el);
-			});
+		});
+		// Switch to single mode if only one
+		if (self.images.length === 1) {
 			self.singleMode = true;
 		}
+
 	};
 
 
@@ -358,6 +355,7 @@ function $lightbox(mainSelector, childSelector) {
 	 * Main Event Handler
 	 */
 	$on(mainSelector, 'click', function (ev) {
+
 		self.bootstrap();
 
 		// Nothing to show
@@ -370,14 +368,12 @@ function $lightbox(mainSelector, childSelector) {
 		ev.preventDefault();
 		ev.stopImmediatePropagation();
 
-
 		// Get the index of the clicked element
 		// In single mode it is found in the mainSelector
 		// In gallery mode we need to walk the nodeTree to find the correct URL of the clicked child
 
 		var clickedElement = ev.target;
 		var index = self.detectUrl(clickedElement);
-
 		while (index === false) {
 
 			// Abort if its the last checked element is the mainSelector, there is no reason to go upper then it
@@ -401,4 +397,7 @@ function $lightbox(mainSelector, childSelector) {
 
 	});
 
+	return {
+		images: self.images
+	};
 }

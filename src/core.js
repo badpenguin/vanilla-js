@@ -306,7 +306,7 @@ function $triggerEvent(el, stEventName) {
 function $on(parentSelector, eventName, callback) {
 	$all(parentSelector).forEach(function (el) {
 		el.addEventListener(eventName, function (ev) {
-			callback(ev, this);
+			callback(ev, el);
 		}, false);
 	});
 }
