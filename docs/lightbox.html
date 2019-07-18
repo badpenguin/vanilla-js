@@ -20,6 +20,7 @@
 	/*
 	 * Suggested CSS, not strictly needed for working, its just for theming
 	 */
+	body {height:100%;position:relative;overflow:auto}
 	.lightbox-modal {
 		color: #fff;
 	}
@@ -29,6 +30,24 @@
 	.lightbox-next {
 		background: rgba(255, 255, 255, 0.01);
 		padding: 2rem;
+		line-height: 1;
+	}
+	@media (max-width: 480px) {
+		.lightbox-close,
+		.lightbox-prev,
+		.lightbox-next {
+			padding: 0;
+		}
+		.lightbox-close {
+			top: 0 !important;
+			right: 0 !important;
+		}
+		.lightbox-next {
+			right: 0 !important;
+		}
+		.lightbox-prev {
+			left: 0 !important;
+		}
 	}
 
 	.lightbox-modal figure {
@@ -57,7 +76,7 @@
 
 </style>
 
-<div class="container container-small">
+<div class="container container-small fluid">
 
 	<h1>Lightbox</h1>
 

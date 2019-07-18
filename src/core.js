@@ -107,6 +107,26 @@ function $append(htmlString) {
 }
 
 
+/**
+ * Prevents screen scrolling when a modal is open
+ * https://css-tricks.com/prevent-page-scrolling-when-a-modal-is-open/
+ */
+function $disableScreenScrolling() {
+	document.body.style.height = '100vh';
+	document.body.style.overflow = 'hidden';
+	document.body.style.position = 'fixed';
+}
+
+/**
+ * Restore previous state
+ */
+function $restoreScreenScrolling() {
+	document.body.style.height = 'initial';
+	document.body.style.overflow = 'initial';
+	document.body.style.position = 'initial';
+}
+
+
 /*
  * HTMLElement manipulation
  */
