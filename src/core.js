@@ -111,25 +111,36 @@ function $append(htmlString) {
  * Prevents screen scrolling when a modal is open
  * https://css-tricks.com/prevent-page-scrolling-when-a-modal-is-open/
  */
+
+var documentBodyStyleTop = '';
+
 function $disableScreenScrolling() {
 	var documentWidth = document.documentElement.clientWidth;
 	var windowWidth = window.innerWidth;
 	var scrollBarWidth = windowWidth - documentWidth;
 
+	// Preserve scrolling height
+	documentBodyStyleTop = window.scrollY;
+
+	document.body.parentNode.style.scrollBehavior = 'auto';
 	document.body.style.height = '100vh';
 	document.body.style.overflow = 'hidden';
 	document.body.style.position = 'fixed';
 	document.body.style.paddingRight =  scrollBarWidth+'px';
+	document.body.style.top = '-'+ documentBodyStyleTop+ 'px';
 }
 
 /**
  * Restore previous state
  */
 function $restoreScreenScrolling() {
-	document.body.style.height = 'initial';
-	document.body.style.overflow = 'initial';
-	document.body.style.position = 'initial';
-	document.body.style.paddingRight = 'initial';
+	document.body.style.height = '';
+	document.body.style.overflow = '';
+	document.body.style.position = '';
+	document.body.style.paddingRight = '';
+	window.scrollTo(0, parseInt(documentBodyStyleTop, 10));
+	document.body.style.top = '';
+	document.body.parentNode.style.scrollBehavior = '';
 }
 
 
@@ -236,7 +247,7 @@ function $detectSwipe(el, callback, treshold) {
 	el.addEventListener('touchstart', function (ev) {
 		touchstartX = ev.changedTouches[0].screenX;
 		touchstartY = ev.changedTouches[0].screenY;
-	}, false);
+	}, {passive: true});
 
 	el.addEventListener('touchend', function (ev) {
 		touchendX = ev.changedTouches[0].screenX;
@@ -263,7 +274,7 @@ function $detectSwipe(el, callback, treshold) {
 			}
 		}
 
-	}, false);
+	});
 }
 
 

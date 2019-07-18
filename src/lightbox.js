@@ -41,7 +41,7 @@ function $lightbox(mainSelector, childSelector) {
 			'<div class="lightbox-prev" style="position:absolute;top:calc(50% - 50px);left:10px;font-size:6rem;line-height:100px;cursor:pointer;">&lsaquo;</div>\n' +
 			'</div>');
 
-		// Attach HTMLElements
+		// Cache HTMLElements
 		self.modal = $('#'+modalId);
 		self.modalImage = $find(self.modal, 'img').first();
 		self.modalCaption = $find(self.modal, 'figcaption').first();
@@ -146,9 +146,9 @@ function $lightbox(mainSelector, childSelector) {
 		/*
 		 * Manage Image Error
 		 */
-		self.modalImage.addEventListener('error', function (ev) {
+		/*self.modalImage.addEventListener('error', function (ev) {
 			console.error('$lightbox: img loading error', ev.target);
-		});
+		});*/
 
 		/**
 		 * Right arrow click
