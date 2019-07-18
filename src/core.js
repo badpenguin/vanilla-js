@@ -221,7 +221,7 @@ function $show(el, displayType) {
  *
  * @param {HTMLElement} el
  * @param {function} callback
- * @param {int} [treshold=150]
+ * @param {int} [treshold=50]
  */
 function $detectSwipe(el, callback, treshold) {
 	var touchstartX = 0;
@@ -229,7 +229,7 @@ function $detectSwipe(el, callback, treshold) {
 	var touchendX = 0;
 	var touchendY = 0;
 	if (!treshold) {
-		treshold = 150;
+		treshold = 50;
 	}
 
 

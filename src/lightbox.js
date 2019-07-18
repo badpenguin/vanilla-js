@@ -33,7 +33,7 @@ function $lightbox(mainSelector, childSelector) {
 		var modalId = 'lightbox-modal-' + lightboxInstanceCount;
 
 		//console.debug('$lightbox: adding', modalId);
-		$append('<div id="' + modalId + '" class="lightbox-modal" style="position:fixed;top:0;left:0;right:0;bottom:0;background:#444;display:none;transition: opacity .5s ease-in-out;z-index:2;pointer-events: none">\n' +
+		$append('<div id="' + modalId + '" class="lightbox-modal" style="position:fixed;top:0;left:0;right:0;bottom:0;background:#333;display:none;transition: opacity .5s ease-in-out;z-index:2;pointer-events: none">\n' +
 			'<figure style="position:absolute;top:0;left:0;right:0;bottom:0;display:flex;flex-direction:column;align-items: center;justify-content: center;"><img alt="" src="" style="width:100%;height:auto;max-height:100vh;object-fit:contain;opacity: 0;transition:opacity .5s ease-in-out" >\n' +
 			'<figcaption></figcaption></figure>\n' +
 			'<div class="lightbox-close" style="position:absolute;top:10px;right:10px;font-size:3rem;cursor:pointer;">&times;</div>\n' +
