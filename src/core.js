@@ -7,6 +7,11 @@
  * - loading
  * - interactive (DOMContentLoaded event)
  * - complete (load event)
+ *
+ * Shortcut:
+ *  - document.documentElement => <HTML>
+ *  - document.head
+ *  - document.body
  */
 
 
@@ -99,6 +104,14 @@ function $find(el, selector) {
 
 
 /**
+ * Append STYLE into HEAD before stylesheets
+ * @param htmlString
+ */
+function $prepend(htmlString) {
+	document.head.insertAdjacentHTML('afterbegin', htmlString);
+}
+
+/**
  * Append HTML for modals at the end of the BODY tag
  * @param {string} htmlString
  */
@@ -108,39 +121,23 @@ function $append(htmlString) {
 
 
 /**
- * Prevents screen scrolling when a modal is open
+ * I tried first the url below but it was too complicated:
  * https://css-tricks.com/prevent-page-scrolling-when-a-modal-is-open/
+ *
+ * I prefer to use touch-action that already solved the problem in Android/Chrome but not in Safari
  */
 
-var documentBodyStyleTop = '';
-
 function $disableScreenScrolling() {
-	var documentWidth = document.documentElement.clientWidth;
-	var windowWidth = window.innerWidth;
-	var scrollBarWidth = windowWidth - documentWidth;
-
-	// Preserve scrolling height
-	documentBodyStyleTop = window.scrollY;
-
-	document.body.parentNode.style.scrollBehavior = 'auto';
-	document.body.style.height = '100vh';
-	document.body.style.overflow = 'hidden';
-	document.body.style.position = 'fixed';
-	document.body.style.paddingRight =  scrollBarWidth+'px';
-	document.body.style.top = '-'+ documentBodyStyleTop+ 'px';
+	document.body.style.touchAction = 'none';
+	$addClass(document.body,'bp-disable-scroll');
 }
 
 /**
  * Restore previous state
  */
 function $restoreScreenScrolling() {
-	document.body.style.height = '';
-	document.body.style.overflow = '';
-	document.body.style.position = '';
-	document.body.style.paddingRight = '';
-	window.scrollTo(0, parseInt(documentBodyStyleTop, 10));
-	document.body.style.top = '';
-	document.body.parentNode.style.scrollBehavior = '';
+	document.body.style.touchAction = '';
+	$removeClass(document.body,'bp-disable-scroll');
 }
 
 
@@ -243,7 +240,6 @@ function $detectSwipe(el, callback, treshold) {
 		treshold = 50;
 	}
 
-
 	el.addEventListener('touchstart', function (ev) {
 		touchstartX = ev.changedTouches[0].screenX;
 		touchstartY = ev.changedTouches[0].screenY;
@@ -310,3 +306,14 @@ function $on(parentSelector, eventName, callback) {
 		}, false);
 	});
 }
+
+
+/**
+ * Arrays
+ */
+Array.prototype.unique = function() {
+	var seen = {};
+	return this.filter(function(item) {
+		return seen.hasOwnProperty(item) ? false : (seen[item] = true);
+	});
+};

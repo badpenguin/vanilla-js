@@ -6,10 +6,12 @@ function $lightbox(mainSelector, childSelector) {
 
 	// semaphore
 	self.initialized = false;
+	self.modalId = null;
 
 	// HTMLelement cache
 	self.modal = null;
-	self.modalImage = null;
+	self.modalImage1 = null;
+	self.modalImage2 = null;
 	self.modalCaption = null;
 	self.modalNext = null;
 	self.modalPrev = null;
@@ -25,32 +27,74 @@ function $lightbox(mainSelector, childSelector) {
 
 
 	/**
+	 * Insert the common CSS after the HEAD and before the stylesheet, this way you can customized it with your own style.css
+	 */
+	self.insertCss = function () {
+
+		if ($('#lightbox-inline-css')) {
+			return;
+		}
+
+		$prepend(
+			'<style id="lightbox-inline-css">' +
+			'.lightbox-modal{position:fixed;top:0;left:0;width:100%;height:100%;background:#000;z-index:2;pointer-events: none;opacity:0;transform: scale(0);transition: opacity .4s ease-in-out, transform .3s ease-in-out;}' +
+			'.lightbox-modal.open{pointer-events:auto;display:block;opacity:1;transform: scale(1);}' +
+			'.lightbox-modal img{position:absolute;top:0;left:0;right:0;bottom:0;width:100%;height:100vh;object-fit:contain;opacity: 0;transition:all .4s ease-in-out}' +
+			'.lightbox-close{position:absolute;top:10px;right:10px;font-size:3rem;cursor:pointer;}' +
+			'.lightbox-next,.lightbox-prev{position:absolute;top:calc(50% - 50px);font-size:6rem;line-height:100px;cursor:pointer;}' +
+			'.lightbox-modal.singleMode .lightbox-next,.lightbox-modal.singleMode .lightbox-prev{display:none}' +
+			'.lightbox-next{right:10px;}' +
+			'.lightbox-prev{left:10px;}' +
+			'</style>'
+		);
+
+		// Sorry, i really don't want right click on my website
+		document.body.addEventListener('contextmenu', function (ev) {
+			console.warn('@This material is copyright by the author - All Right Reserved');
+			ev.preventDefault();
+			return false;
+		}, false);
+
+	};
+
+
+	/**
+	 * Create an instance of the modal at the end of the BODY tag only when clicked
+	 */
+	self.insertModal = function () {
+		lightboxInstanceCount++;
+		self.modalId = 'lightbox-modal-' + lightboxInstanceCount;
+
+		$append(
+			'<div id="' + self.modalId + '" class="lightbox-modal">\n' +
+			'<figure><img alt=""><img alt=""><figcaption/></figure>\n' +
+			'<div class="lightbox-close">&times;</div>\n' +
+			'<div class="lightbox-next">&rsaquo;</div>\n' +
+			'<div class="lightbox-prev">&lsaquo;</div>\n' +
+			'</div>');
+	};
+
+
+	/**
 	 * Add the modal to the DOM and initialize all the possible event handlers
 	 */
 	self.checkModal = function () {
 
-		lightboxInstanceCount++;
-		var modalId = 'lightbox-modal-' + lightboxInstanceCount;
+		// Create the markup
+		self.insertModal();
 
-		//console.debug('$lightbox: adding', modalId);
-		$append('<div id="' + modalId + '" class="lightbox-modal" style="position:fixed;top:0;left:0;right:0;bottom:0;background:#333;display:none;transition: opacity .5s ease-in-out;z-index:2;pointer-events: none">\n' +
-			'<figure style="position:absolute;top:0;left:0;right:0;bottom:0;display:flex;flex-direction:column;align-items: center;justify-content: center;"><img alt="" src="" style="width:100%;height:auto;max-height:100vh;object-fit:contain;opacity: 0;transition:opacity .5s ease-in-out" >\n' +
-			'<figcaption></figcaption></figure>\n' +
-			'<div class="lightbox-close" style="position:absolute;top:10px;right:10px;font-size:3rem;cursor:pointer;">&times;</div>\n' +
-			'<div class="lightbox-next" style="position:absolute;top:calc(50% - 50px);right:10px;font-size:6rem;line-height:100px;cursor:pointer;">&rsaquo;</div>\n' +
-			'<div class="lightbox-prev" style="position:absolute;top:calc(50% - 50px);left:10px;font-size:6rem;line-height:100px;cursor:pointer;">&lsaquo;</div>\n' +
-			'</div>');
-
-		// Cache HTMLElements
-		self.modal = $('#' + modalId);
-		self.modalImage = $find(self.modal, 'img').first();
+		// Cache HTMLElements that we need
+		self.modal = $('#' + self.modalId);
+		var tempImg = $find(self.modal, 'img');
+		self.modalImage1 = tempImg[0];
+		self.modalImage2 = tempImg[1];
 		self.modalCaption = $find(self.modal, 'figcaption').first();
 		var closeButton = $find(self.modal, '.lightbox-close').first();
 		self.modalNext = $find(self.modal, '.lightbox-next').first();
 		self.modalPrev = $find(self.modal, '.lightbox-prev').first();
 
 		/*
-		 * Manage Swipes
+		 * Detect Swipes
 		 */
 		$detectSwipe(self.modal, function (direction) {
 			// Skip if not open
@@ -69,7 +113,7 @@ function $lightbox(mainSelector, childSelector) {
 				return;
 			}
 
-			// Other Events will close
+			// Any Other Events will close
 			self.hide();
 
 		});
@@ -111,6 +155,14 @@ function $lightbox(mainSelector, childSelector) {
 				ev.preventDefault();
 				ev.stopImmediatePropagation();
 				self.next();
+				return;
+			}
+
+			// Sorry, i don't want you to save my images
+			if (key === 's' && ev.ctrlKey === true) {
+				ev.preventDefault();
+				ev.stopImmediatePropagation();
+				self.next();
 				//noinspection UnnecessaryReturnStatementJS
 				return;
 			}
@@ -127,21 +179,34 @@ function $lightbox(mainSelector, childSelector) {
 			self.hide();
 		});
 
+
 		/*
 		 * Manage Click on image (desktop)
 		 */
-		self.modalImage.addEventListener('click', function (ev) {
+		self.modalImage1.addEventListener('click', function (ev) {
+			ev.preventDefault();
+			ev.stopImmediatePropagation();
+			self.next();
+		});
+		self.modalImage2.addEventListener('click', function (ev) {
 			ev.preventDefault();
 			ev.stopImmediatePropagation();
 			self.next();
 		});
 
+
 		/*
-		 * Cross fade image
+		 * Begin cross-fade only when image is ready
 		 */
-		self.modalImage.addEventListener('load', function () {
-			self.modalImage.style.opacity = '1';
+		self.modalImage1.addEventListener('load', function () {
+			self.modalImage1.style.opacity = '1';
+			self.modalImage2.style.opacity = '0';
 		});
+		self.modalImage2.addEventListener('load', function () {
+			self.modalImage2.style.opacity = '1';
+			self.modalImage1.style.opacity = '0';
+		});
+
 
 		/*
 		 * Manage Image Error
@@ -149,6 +214,7 @@ function $lightbox(mainSelector, childSelector) {
 		/*self.modalImage.addEventListener('error', function (ev) {
 			console.error('$lightbox: img loading error', ev.target);
 		});*/
+
 
 		/**
 		 * Right arrow click
@@ -158,6 +224,7 @@ function $lightbox(mainSelector, childSelector) {
 			ev.stopImmediatePropagation();
 			self.next();
 		});
+
 
 		/**
 		 * Left arrow click
@@ -172,7 +239,7 @@ function $lightbox(mainSelector, childSelector) {
 
 
 	/**
-	 * Search an element for the URL of the big picture and for captions
+	 * Search an element for the URL of the "big" picture and for captions
 	 * @param {HTMLElement} el
 	 */
 	self.scanElement = function (el) {
@@ -196,7 +263,7 @@ function $lightbox(mainSelector, childSelector) {
 
 
 	/**
-	 * Build the array with images url and captions
+	 * Build the array with the images's url and captions
 	 */
 	self.checkImages = function () {
 
@@ -209,9 +276,11 @@ function $lightbox(mainSelector, childSelector) {
 				self.scanElement(target);
 			}
 		});
-		// Switch to single mode if only one
+
+		// Switch to single mode if only one is found
 		if (self.images.length === 1) {
 			self.singleMode = true;
+			$addClass(self.modal, 'singleMode');
 		}
 
 	};
@@ -238,18 +307,28 @@ function $lightbox(mainSelector, childSelector) {
 
 		self.currentIndex = index;
 
-		// Hide previous image
-		self.modalImage.style.opacity = '0';
-		//self.modalImage.src = '';
-		self.modalImage.setAttribute('title', '');
+		// Set the other image
+		var newImage = null;
+		var oldImage = null;
+		var activeImage = self.currentIndex % 2;
+		if (activeImage === 0) {
+			newImage = self.modalImage1;
+			oldImage = self.modalImage2;
+		} else {
+			newImage = self.modalImage2;
+			oldImage = self.modalImage1;
+		}
+
+		// We have only 1 caption: clear it
+		oldImage.setAttribute('title', '');
 		self.modalCaption.innerText = '';
 
-		var caption = self.images[index][1];
-
 		// Load new image
-		self.modalImage.src = self.images[index][0];
+		newImage.src = self.images[index][0];
+
+		var caption = self.images[index][1];
 		if (caption) {
-			self.modalImage.setAttribute('title', caption);
+			newImage.setAttribute('title', caption);
 			self.modalCaption.innerText = caption;
 		}
 
@@ -265,31 +344,34 @@ function $lightbox(mainSelector, childSelector) {
 		// Hide previous modal
 		self.hide();
 
-		// Show Image
+		// Show Image (so it will start loading)
 		self.switchImage(index);
 
 		// Activate the modal
-		$show(self.modal);
 		self.isOpen = true;
-		$addClass(self.modal, 'open');
-		self.modal.style.pointerEvents = 'auto';
-
-		// Trigger the CSS animation
-		setTimeout(function () {
-			self.modal.style.opacity = '1';
-		}, 0);
-
-		// Restore/Hide Controls depending on the single/gallery mode
-		if (self.singleMode) {
-			$hide(self.modalPrev);
-			$hide(self.modalNext);
-		} else {
-			$show(self.modalPrev);
-			$show(self.modalNext);
-		}
 
 		// Prevent screen scrolling
 		$disableScreenScrolling();
+
+		// Add class in background to trigger animation on slow mobile devices
+		setTimeout(function () {
+			$addClass(self.modal, 'open');
+		}, 0);
+
+		self.preloadImages();
+	};
+
+
+	self.preloadImages = function () {
+		var filteredList = self.images.map(function (v) {
+			return v[0];
+		}).unique().slice(1);
+
+		filteredList.forEach(function (url) {
+			var pic = new Image();
+			//noinspection JSValidateTypes
+			pic.src = url;
+		});
 	};
 
 
@@ -297,11 +379,8 @@ function $lightbox(mainSelector, childSelector) {
 	 * Hide the modal
 	 */
 	self.hide = function () {
-		// Close
-		$removeClass(self.modal, 'open');
-		self.modal.style.pointerEvents = 'none';
-		self.modal.style.opacity = '0';
 		self.isOpen = false;
+		$removeClass(self.modal, 'open');
 		$restoreScreenScrolling();
 	};
 
@@ -350,6 +429,10 @@ function $lightbox(mainSelector, childSelector) {
 		return false;
 	};
 
+
+	self.insertCss();
+// Don't pre-insert markup at bootstrap, we'll handle it onclick
+//	self.insertModal();
 
 	/**
 	 * Main Event Handler
