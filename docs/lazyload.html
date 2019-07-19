@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Lazy Load Images - Vanilla JS Tests</title>
+	<meta charset="UTF-8">
+	<meta name="viewport"
+			content="width=device-width, user-scalable=no,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
+	<link href="vanilla.min.css" rel="stylesheet" type="text/css"/>
+	<link href="menu.css" rel="stylesheet" type="text/css"/>
+	<script type="text/javascript" src="menu.js"></script>
+	<script type="text/javascript" src="vanilla-js.min.js"></script>
+</head>
+<body>
+
+<header>
+	<script>writeResponsiveMenu()</script>
+</header>
+
+<style>
+	img.lazyload {
+		min-height: 300px;
+	}
+
+</style>
+
+<div class="container container-small fluid">
+
+	<h1>Lazy Load Images</h1>
+	<p>Lazy load the images using:</p>
+	<pre>
+onPageReady(function () {
+	// This website
+	$lazyload('.grid .cell img');
+	// Wordpress
+	$lazyload('.wp-block-gallery img,.wp-block-image img');
+});
+</pre>
+	<p>Add <code>true</code> as second parameter to force loading after the <code>window.load</code> event.</p>
+
+	<hr>
+
+	<h2>Example</h2>
+
+	<div class="grid grid-auto grid-gutter gallery1">
+
+		<div class="cell s-1-1"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+			dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex
+			ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat
+			nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit
+			anim id est laborum.
+		</p></div>
+
+		<div class="cell s-1-1">
+			<a href="https://source.unsplash.com/E_eWwM29wfU/800x600" title="Foto 1"><img
+					src="https://source.unsplash.com/E_eWwM29wfU/800x600"></a>
+		</div>
+
+		<div class="cell s-1-1"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+			dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex
+			ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat
+			nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit
+			anim id est laborum.
+		</p></div>
+
+		<div class="cell s-1-1">
+			<a href="https://source.unsplash.com/_UIN-pFfJ7c/800x600"><img
+					src="https://source.unsplash.com/_UIN-pFfJ7c/800x600" alt="Foto 2"></a>
+		</div>
+
+		<div class="cell s-1-1"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+			dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex
+			ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat
+			nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit
+			anim id est laborum.
+		</p></div>
+
+		<div class="cell s-1-1">
+			<a href="https://source.unsplash.com/MsMISAIe8Qw/800x600"><img
+					src="https://source.unsplash.com/MsMISAIe8Qw/800x600" title="Foto 3"></a>
+		</div>
+
+		<div class="cell s-1-1"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+			dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex
+			ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat
+			nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit
+			anim id est laborum.
+		</p></div>
+
+		<div class="cell s-1-1">
+			<a id="foto1" href="https://source.unsplash.com/layMbSJ3YOE/800x600" title="Foto 1"><img
+					src="https://source.unsplash.com/layMbSJ3YOE/800x600"></a>
+		</div>
+
+		<div class="cell s-1-1"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+			dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex
+			ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat
+			nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit
+			anim id est laborum.
+		</p></div>
+
+		<div class="cell s-1-1">
+			<a id="foto2" href="https://source.unsplash.com/IocJwyqRv3M/800x600"><img
+					src="https://source.unsplash.com/IocJwyqRv3M/800x600" alt="Foto 2"></a>
+		</div>
+
+		<div class="cell s-1-1"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+			dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex
+			ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat
+			nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit
+			anim id est laborum.
+		</p></div>
+
+		<div class="cell s-1-1">
+			<a id="foto3" href="https://source.unsplash.com/NiyRORf8d8I/800x600"><img
+					src="https://source.unsplash.com/NiyRORf8d8I/800x600" title="Foto 3"></a>
+		</div>
+
+		<div class="cell s-1-1"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+			dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex
+			ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat
+			nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit
+			anim id est laborum.
+		</p></div>
+
+	</div>
+</div>
+
+<script>
+
+
+	onPageReady(function () {
+
+		//$lazyload('.wp-block-gallery img,.wp-block-image img');
+		$lazyload('.grid .cell img');
+
+	});
+
+</script>
+
+
+</body>
+</html>

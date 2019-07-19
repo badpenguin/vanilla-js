@@ -1,7 +1,8 @@
 var menu = [
 	//['index.html', 'Vanilla JS', 'home dont-toggle'],
 	['main.html', 'Basic JS', ''],
-	['lightbox.html', 'Lightbox', '']
+	['lightbox.html', 'Lightbox', ''],
+		['lazyload.html', 'Lazy Load', '']
 ];
 
 

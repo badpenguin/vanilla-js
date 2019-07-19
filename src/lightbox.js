@@ -37,9 +37,9 @@ function $lightbox(mainSelector, childSelector) {
 
 		$prepend(
 			'<style id="lightbox-inline-css">' +
-			'.lightbox-modal{position:fixed;top:0;left:0;width:100%;height:100%;background:#000;z-index:2;pointer-events: none;opacity:0;transform: scale(0);transition: opacity .4s ease-in-out, transform .3s ease-in-out;}' +
-			'.lightbox-modal.open{pointer-events:auto;display:block;opacity:1;transform: scale(1);}' +
-			'.lightbox-modal img{position:absolute;top:0;left:0;right:0;bottom:0;width:100%;height:100vh;object-fit:contain;opacity: 0;transition:all .4s ease-in-out}' +
+			'.lightbox-modal{position:fixed;top:0;left:0;width:100%;height:100%;background:#000;z-index:2;pointer-events:none;opacity:0;transform:scale(0);transition:opacity .4s ease-in-out, transform .3s ease-in-out;}' +
+			'.lightbox-modal.open{pointer-events:auto;display:block;opacity:1;transform:scale(1);}' +
+			'.lightbox-modal img{position:absolute;top:0;left:0;right:0;bottom:0;width:100%;height:100vh;object-fit:contain;opacity:0;transition:all .4s ease-in-out}' +
 			'.lightbox-close{position:absolute;top:10px;right:10px;font-size:3rem;cursor:pointer;}' +
 			'.lightbox-next,.lightbox-prev{position:absolute;top:calc(50% - 50px);font-size:6rem;line-height:100px;cursor:pointer;}' +
 			'.lightbox-modal.singleMode .lightbox-next,.lightbox-modal.singleMode .lightbox-prev{display:none}' +
@@ -118,8 +118,9 @@ function $lightbox(mainSelector, childSelector) {
 
 		});
 
-		/*
+		/**
 		 * Manage Keyboard
+		 * @param {KeyboardEvent} el
 		 */
 		window.addEventListener('keydown', function (ev) {
 
@@ -170,8 +171,9 @@ function $lightbox(mainSelector, childSelector) {
 		});
 
 
-		/*
+		/**
 		 * Manage Close Button
+		 * @param {MouseEvent} ev
 		 */
 		closeButton.addEventListener('click', function (ev) {
 			ev.preventDefault();
@@ -180,14 +182,20 @@ function $lightbox(mainSelector, childSelector) {
 		});
 
 
-		/*
+		/**
 		 * Manage Click on image (desktop)
+		 * @param {MouseEvent} ev
 		 */
 		self.modalImage1.addEventListener('click', function (ev) {
 			ev.preventDefault();
 			ev.stopImmediatePropagation();
 			self.next();
 		});
+
+
+		/**
+		 * @param {MouseEvent} ev
+		 */
 		self.modalImage2.addEventListener('click', function (ev) {
 			ev.preventDefault();
 			ev.stopImmediatePropagation();
@@ -202,6 +210,7 @@ function $lightbox(mainSelector, childSelector) {
 			self.modalImage1.style.opacity = '1';
 			self.modalImage2.style.opacity = '0';
 		});
+
 		self.modalImage2.addEventListener('load', function () {
 			self.modalImage2.style.opacity = '1';
 			self.modalImage1.style.opacity = '0';
@@ -218,6 +227,7 @@ function $lightbox(mainSelector, childSelector) {
 
 		/**
 		 * Right arrow click
+		 * @param {MouseEvent} ev
 		 */
 		self.modalNext.addEventListener('click', function (ev) {
 			ev.preventDefault();
@@ -228,6 +238,7 @@ function $lightbox(mainSelector, childSelector) {
 
 		/**
 		 * Left arrow click
+		 * @param {MouseEvent} ev
 		 */
 		self.modalPrev.addEventListener('click', function (ev) {
 			ev.preventDefault();
@@ -382,6 +393,9 @@ function $lightbox(mainSelector, childSelector) {
 		self.isOpen = false;
 		$removeClass(self.modal, 'open');
 		$restoreScreenScrolling();
+		// Hide both images
+		self.modalImage1.style.opacity = '0';
+		self.modalImage2.style.opacity = '0';
 	};
 
 

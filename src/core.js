@@ -21,7 +21,6 @@
  */
 function onPageReady(callback) {
 	if (document.readyState !== 'loading') {
-		console.debug('onPageReady already completed, firing callback...');
 		callback();
 	}
 	document.addEventListener('DOMContentLoaded', callback);
@@ -34,7 +33,6 @@ function onPageReady(callback) {
  */
 function onPageLoad(callback) {
 	if (document.readyState === 'complete') {
-		console.debug('onPageReady already completed, firing callback...');
 		callback();
 	}
 	window.addEventListener('load', callback);
