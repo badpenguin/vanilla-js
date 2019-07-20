@@ -9,6 +9,9 @@ header {
 
 footer {
 	margin-top: 3rem;
+	background: #eee;
+	text-align: center;
+	padding: 1rem;
 }
 
 @media (min-width: 1024px) {

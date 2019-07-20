@@ -48,12 +48,6 @@ function $lightbox(mainSelector, childSelector) {
 			'</style>'
 		);
 
-		// Sorry, i really don't want right click on my website
-		document.body.addEventListener('contextmenu', function (ev) {
-			console.warn('@This material is copyright by the author - All Right Reserved');
-			ev.preventDefault();
-			return false;
-		}, false);
 
 	};
 

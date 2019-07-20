@@ -14,6 +14,8 @@
  *  - document.body
  */
 
+var hasClassList = ('classList' in document.createElement('p'));
+
 
 /**
  * The "DOMContentLoaded" does not fire if it has already happened
@@ -127,7 +129,7 @@ function $append(htmlString) {
 
 function $disableScreenScrolling() {
 	document.body.style.touchAction = 'none';
-	$addClass(document.body,'bp-disable-scroll');
+	$addClass(document.body, 'bp-disable-scroll');
 }
 
 /**
@@ -135,7 +137,7 @@ function $disableScreenScrolling() {
  */
 function $restoreScreenScrolling() {
 	document.body.style.touchAction = '';
-	$removeClass(document.body,'bp-disable-scroll');
+	$removeClass(document.body, 'bp-disable-scroll');
 }
 
 
@@ -149,9 +151,11 @@ function $restoreScreenScrolling() {
  * @param stClass
  */
 function $addClass(el, stClass) {
-	if (el.classList) {
+	if (hasClassList) {
 		el.classList.add(stClass);
+		return;
 	}
+	// Poor man add class, does not take care of duplicated items
 	el.className += ' ' + stClass;
 }
 
@@ -162,9 +166,11 @@ function $addClass(el, stClass) {
  * @returns {void|*}
  */
 function $removeClass(el, stClass) {
-	if (el.classList) {
+	if (hasClassList) {
 		el.classList.remove(stClass);
+		return;
 	}
+	// Poor man remove class, does not take care of duplicated items
 	el.className = el.className.replace(new RegExp('(^|\\b)' + stClass.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
 }
 
@@ -176,7 +182,7 @@ function $removeClass(el, stClass) {
  * @returns {boolean}
  */
 function $hasClass(el, stClass) {
-	if (el.classList) {
+	if (hasClassList) {
 		return el.classList.contains(stClass);
 	}
 	return new RegExp('(^| )' + stClass + '( |$)', 'gi').test(el.className);
@@ -191,16 +197,17 @@ function $hasClass(el, stClass) {
 function $toggleClass(el, StClass) {
 	if (el.classList) {
 		el.classList.toggle(StClass);
-	} else {
-		var classes = el.className.split(' ');
-		var existingIndex = classes.indexOf(StClass);
-		if (existingIndex >= 0) {
-			classes.splice(existingIndex, 1);
-		} else {
-			classes.push(StClass);
-		}
-		el.className = classes.join(' ');
+		return;
 	}
+	// Poor man toggle class, does not take care of duplicated items
+	var classes = el.className.split(' ');
+	var existingIndex = classes.indexOf(StClass);
+	if (existingIndex >= 0) {
+		classes.splice(existingIndex, 1);
+	} else {
+		classes.push(StClass);
+	}
+	el.className = classes.join(' ');
 }
 
 
@@ -254,17 +261,17 @@ function $detectSwipe(el, callback, treshold) {
 			// Horizontal
 			if (Math.abs(dx) > treshold) {
 				if (dx < 0) {
-					return callback('left',ev);
+					return callback('left', ev);
 				}
-				return callback('right',ev);
+				return callback('right', ev);
 			}
 		} else {
 			// Vertical
 			if (Math.abs(dy) > treshold) {
 				if (dy > 0) {
-					return callback('down',ev);
+					return callback('down', ev);
 				}
-				return callback('up',ev);
+				return callback('up', ev);
 			}
 		}
 
@@ -309,9 +316,9 @@ function $on(parentSelector, eventName, callback) {
 /**
  * Arrays
  */
-Array.prototype.unique = function() {
+Array.prototype.unique = function () {
 	var seen = {};
-	return this.filter(function(item) {
+	return this.filter(function (item) {
 		return seen.hasOwnProperty(item) ? false : (seen[item] = true);
 	});
 };
