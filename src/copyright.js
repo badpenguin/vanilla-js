@@ -3,9 +3,6 @@ function $copyright(title) {
 	var self = {};
 	self.title = title || 'This material is copyright by the author - All Right Reserved';
 
-	console.log('$copyright:', self.title);
-
-
 	// Sorry, i really don't want right click on my website
 	document.body.addEventListener('contextmenu', function (ev) {
 		console.warn(self.title);

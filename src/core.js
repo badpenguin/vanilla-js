@@ -67,9 +67,10 @@ var $all = document.querySelectorAll.bind(document);
  * @param {function} callback
  * @param scope
  */
-var forEach = function (array, callback, scope) {
+var $forEach = function (array, callback, scope) {
 	for (var i = 0; i < array.length; i++) {
-		callback.call(scope, i, array[i]);
+		//callback.call(scope, i, array[i]);
+		callback.call(scope, array[i], i);
 	}
 };
 
