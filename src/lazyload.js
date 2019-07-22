@@ -1,4 +1,5 @@
-function $lazyload(mainSelector, forceLoad) {
+
+function $lazyload(mainSelector, options) {
 
 	var self = {};
 
@@ -9,6 +10,11 @@ function $lazyload(mainSelector, forceLoad) {
 
 	self.images = [];
 
+	self.options = {
+		autoLoad: false,
+		cancelInitialLoad: false
+	};
+	self.options = Object.assign(self.options, options);
 
 	/**
 	 *
@@ -16,17 +22,21 @@ function $lazyload(mainSelector, forceLoad) {
 	 */
 	self.preloadImage = function (el) {
 
-		var url = el.getAttribute('data-lazy-src');
+		var url = el.getAttribute('data-src');
 		if (url) {
-			el.removeAttribute('data-lazy-src');
-			$removeClass(el, 'lazyload');
+			el.removeAttribute('data-src');
 			$addClass(el, 'lazyloading');
 			var target = el;
-			el.onload = function(el2) {
-				$removeClass(target, 'lazyloading');
+			el.onload = function () {
 				$addClass(target, 'lazyloaded');
+				$removeClass(target, 'lazyloading');
 			};
 			el.setAttribute('src', url);
+			url = el.getAttribute('data-srcset');
+			if (url) {
+				el.removeAttribute('data-srcset');
+				el.setAttribute('srcset', url);
+			}
 		}
 	};
 
@@ -37,7 +47,8 @@ function $lazyload(mainSelector, forceLoad) {
 		 * Google WebDeveloper Code
 		 */
 		var intersectionConfig = {
-			rootMargin: '0px 0px 10px 0px',
+			rootMargin: '400px',
+			//rootMargin: '0px 0px -200px 0px',
 			threshold: 0
 		};
 
@@ -45,7 +56,6 @@ function $lazyload(mainSelector, forceLoad) {
 
 			entries.forEach(function (entry) {
 				if (entry.isIntersecting) {
-					//console.log('[visible]', entry.target.src);
 					//noinspection JSCheckFunctionSignatures
 					self.preloadImage(entry.target);
 					observer.unobserve(entry.target);
@@ -59,11 +69,23 @@ function $lazyload(mainSelector, forceLoad) {
 
 		// Push in the meat
 		candidates.forEach(function (el) {
-			var url = el.getAttribute('src');
-			if (url) {
-				el.removeAttribute('src');
-				$addClass(el, 'lazyload');
-				el.setAttribute('data-lazy-src', url);
+			if (self.options.cancelInitialLoad) {
+				var url = el.getAttribute('src');
+				if (url) {
+					el.removeAttribute('src');
+					el.setAttribute('data-src', url);
+				}
+			}
+			if (el.hasAttribute('data-src')) {
+
+				el.src = 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';
+				$addClass(el, 'lazyloading');
+
+				var srcset = el.getAttribute('srcset');
+				el.removeAttribute('srcset');
+				if (srcset) {
+					el.setAttribute('data-srcset', srcset);
+				}
 				lazyImageObserver.observe(el);
 				self.images.push(el);
 			}
@@ -71,11 +93,15 @@ function $lazyload(mainSelector, forceLoad) {
 
 
 		// Detach
-		if (forceLoad) {
+		if (self.options.autoLoad) {
 			onPageLoad(function () {
 
-				self.images.forEach(function (el) {
-					self.preloadImage(el);
+				self.images.forEach(function (el, index) {
+					var timeout = (index + 2) * 1000;
+					setTimeout(function () {
+						self.preloadImage(el);
+					}, timeout)
+
 				});
 
 			});

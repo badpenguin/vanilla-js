@@ -260,6 +260,13 @@ function $lightbox(mainSelector, childSelector) {
 			if (child) {
 				caption = child.getAttribute('data-title') || child.getAttribute('title') || child.getAttribute('alt');
 			}
+			// Try again with figcaption
+			if (!caption) {
+				child = $find(el, 'figcaption').first();
+				if (child) {
+					caption = child.innerText;
+				}
+			}
 		}
 
 		// Push
@@ -455,10 +462,6 @@ function $lightbox(mainSelector, childSelector) {
 			return;
 		}
 
-		// Handle
-		ev.preventDefault();
-		ev.stopImmediatePropagation();
-
 		// Get the index of the clicked element
 		// In single mode it is found in the mainSelector
 		// In gallery mode we need to walk the nodeTree to find the correct URL of the clicked child
@@ -483,7 +486,9 @@ function $lightbox(mainSelector, childSelector) {
 			index = self.detectUrl(clickedElement);
 		}
 
-		// Found it
+		// Found it: Handle
+		ev.preventDefault();
+		ev.stopImmediatePropagation();
 		return self.show(index);
 
 	});
