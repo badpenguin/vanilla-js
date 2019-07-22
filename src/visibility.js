@@ -2,17 +2,16 @@
  * This is the old version of visibility that is prior the intersectionObservale
  * The trick is to check for object visiliby when scrolling
  * Of course its not efficient as the new version
+ * but this one will allow to detect before entering the viewport
  */
 
 
-function $inViewport(el) {
+function $inViewport(el, easing) {
 	var rect = el.getBoundingClientRect();
-	var html = document.documentElement;
-	var easing = (window.innerHeight || html.clientHeight) * 0.05;
 	// NOTE: it checks only the vertical position not the horizontal
 	return (
 		rect.top >= 0 &&
-		(rect.top + easing ) <= (window.innerHeight || html.clientHeight)
+		(rect.top + easing ) <= (window.innerHeight || document.documentElement.clientHeight)
 	);
 }
 
@@ -22,38 +21,50 @@ function $windowScrollTop() {
 }
 
 
-function $visibility(selector,options) {
+function $visibility(selector,options,callback) {
 
 	var self = {};
 
 	self.options = Object.assign({
 		invisibleClass: 'invisible',
 		visibleClass: 'animated',
-		loop: true //TODO
+		easing: null
 	}, options);
 
 
 	self.refreshList = function() {
 
-		$forEach(self.nodeList, function(el,index) {
+		var easing = self.options.easing ? self.options.easing : ((window.innerHeight || document.documentElement.clientHeight) * 0.05);
 
-			if ($inViewport(el)) {
-				if (!$hasClass(el,self.options.visibleClass)) {
-					$removeClass(el,self.options.invisibleClass);
+		$forEach(self.nodeList, function(el) {
+
+			if ($inViewport(el, easing)) {
+				if (!el.hasAttribute('data-visibile')) {
+					el.setAttribute('data-visibile',true);
+					if (self.options.invisibleClass) {
+						$removeClass(el,self.options.invisibleClass);
+					}
 					//void element.offsetWidth;
-					//window.requestAnimationFrame(function(){
-					$addClass(el, self.options.visibleClass);
-					//});
+					if (self.options.visibleClass) {
+						$addClass(el, self.options.visibleClass);
+					}
+					if (callback) {
+						callback(el, true);
+					}
 				}
 			} else {
-				if ($hasClass(el,self.options.visibleClass)) {
-					// Skip if already visibile
-					if (!self.options.loop) {
-						return;
+				if (el.hasAttribute('data-visibile')) {
+					el.removeAttribute('data-visibile');
+					if (self.options.visibleClass) {
+						$removeClass(el, self.options.visibleClass);
 					}
-					$removeClass(el, self.options.visibleClass);
+					if (self.options.invisibleClass) {
+						$addClass(el,self.options.invisibleClass);
+					}
+					if (callback) {
+						callback(el, false);
+					}
 				}
-				$addClass(el, self.options.invisibleClass);
 			}
 		});
 
