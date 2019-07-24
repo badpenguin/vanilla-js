@@ -260,12 +260,19 @@ function $lightbox(mainSelector, childSelector) {
 			if (child) {
 				caption = child.getAttribute('data-title') || child.getAttribute('title') || child.getAttribute('alt');
 			}
-			// Try again with figcaption
+			// Try again with figcaption (as child)
 			if (!caption) {
 				child = $find(el, 'figcaption').first();
 				if (child) {
 					caption = child.innerText;
+				} else {
+					// Last chance, try as next sibling
+					child = el.nextSibling;
+					if (child && child.matches('figcaption')) {
+						caption = child.innerText;
+					}
 				}
+
 			}
 		}
 

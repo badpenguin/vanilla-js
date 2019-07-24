@@ -1,5 +1,5 @@
 var menu = [
-	['https://badpenguin.github.io/vanilla-js/', 'GitHub', 'text-bold'],
+	['https://github.com/badpenguin/vanilla-js/', 'GitHub', 'text-bold'],
 	['main.html', 'Basic JS', ''],
 	['lightbox.html', 'Lightbox', ''],
 	['lazyload.html', 'Lazy Load', ''],
@@ -34,5 +34,5 @@ onPageReady(function () {
 
 	document.body.insertAdjacentHTML('afterbegin', writeResponsiveMenu());
 
-	$append('<footer><a href="https://badpenguin.github.io/vanilla-js/">Download from GitHub</a></footer>');
+	$append('<footer><a href="https://github.com/badpenguin/vanilla-js/">Download from GitHub</a></footer>');
 });
