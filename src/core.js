@@ -24,6 +24,7 @@ var hasClassList = ('classList' in document.createElement('p'));
 function onPageReady(callback) {
 	if (document.readyState !== 'loading') {
 		callback();
+		return;
 	}
 	document.addEventListener('DOMContentLoaded', callback);
 }
@@ -36,6 +37,7 @@ function onPageReady(callback) {
 function onPageLoad(callback) {
 	if (document.readyState === 'complete') {
 		callback();
+		return;
 	}
 	window.addEventListener('load', callback);
 }
@@ -59,7 +61,7 @@ var $all = document.querySelectorAll.bind(document);
 
 
 /**
- * Todd Motto's say to don't use [].forEach.call(...)
+ * Todd Motto's suggests to avoid using [].forEach.call(...)
  * https://ultimatecourses.com/blog/ditch-the-array-foreach-call-nodelist-hack
  */
 /**
@@ -132,6 +134,7 @@ function $disableScreenScrolling() {
 	document.body.style.touchAction = 'none';
 	$addClass(document.body, 'bp-disable-scroll');
 }
+
 
 /**
  * Restore previous state
@@ -316,6 +319,12 @@ function $on(parentSelector, eventName, callback) {
 
 /**
  * Arrays
+ */
+
+
+/**
+ * Remove duplicate items from an array
+ * @returns {*[]}
  */
 Array.prototype.unique = function () {
 	var seen = {};
