@@ -1,0 +1,23 @@
+Refactor plugin using: https://gomakethings.com/the-anatomy-of-a-vanilla-javascript-plugin/
+    => https://vanillajstoolkit.com/boilerplates/umd/
+    - https://vanillajstoolkit.com/boilerplates/revealing-module-pattern/
+    - https://vanillajstoolkit.com/boilerplates/constructor/
+    - https://vanillajstoolkit.com/boilerplates/revealing-constructor/
+
+PLUGIN:
+https://gomakethings.com/detecting-scroll-distances-with-vanilla-js/
+https://gomakethings.com/handling-missing-images-with-vanilla-js/
+
+// UTIL:
+https://gomakethings.com/getting-all-query-string-values-from-a-url-with-vanilla-js/
+https://vanillajstoolkit.com/helpers/debounce/
+https://vanillajstoolkit.com/helpers/isinviewport/
+    https://gomakethings.com/how-to-check-if-any-part-of-an-element-is-out-of-the-viewport-with-vanilla-js/
+https://css-tricks.com/form-validation-part-2-constraint-validation-api-javascript/
+https://gomakethings.com/how-to-update-a-url-without-reloading-the-page-using-vanilla-javascript/
+https://gomakethings.com/automatically-expand-a-textarea-as-the-user-types-using-vanilla-javascript/
+https://gomakethings.com/a-better-way-to-test-breakpoints-with-vanilla-javascript/
+https://gomakethings.com/how-to-check-if-any-part-of-an-element-is-out-of-the-viewport-with-vanilla-js/
+https://github.com/chemerisuk/better-form-validation/
+https://vanillajstoolkit.com/helpers/placeholders/
+

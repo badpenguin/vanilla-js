@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Core JS - Vanilla JS Tests</title>
+	<meta charset="UTF-8">
+	<meta name="viewport"
+			content="width=device-width, user-scalable=no,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
+	<link href="vanilla.min.css" rel="stylesheet" type="text/css"/>
+	<link href="menu.css" rel="stylesheet" type="text/css"/>
+	<script type="text/javascript" src="vanilla-js.min.js"></script>
+	<script type="text/javascript" src="menu.js"></script>
+	<style>
+		.red {background-color: rgba(255,0,0,.5);}
+	</style>
+
+</head>
+<body class="test">
+
+<script>
+	// Attach Live before the H2 are created
+	$live('h2', 'click', function (ev) {
+		console.log('$live h2 click', ev);
+	});
+</script>
+
+<div class="container-small fluid">
+
+	<h1>Basic JS</h1>
+	<p>Watch the console's log and the source code to see it in action.</p>
+
+	<h2 id="single-element">Querying the <span>DOM</span></h2>
+	<p><code>core.js</code> provides some simple wrapper, upon vanilla JS functions, to query the DOM.</p>
+	<pre>
+var singleHTMLElement = $one('#single-element');
+var multipleNodeList = $all('#gallery a');
+var childNodelList = $find(singleHTMLEelement,'span');
+	</pre>
+	<p>Use <code>$forEach</code> to loop a NodeList</p>
+
+
+	<h2>Dom Ready</h2>
+	<p>You can use <code>$onReady(cb)</code> or <code>$onLoad(cb)</code> instead place of the JQuery's document ready
+		function.</p>
+
+	<h2>Trigger Event</h2>
+	<p>This generate a standard or a custom event. Accept, as first parameter, both a string or an HTMLElement.</p>
+	<pre>$triggerEvent(el, stEventName);</pre>
+
+	<h2>Listen on multiple elements</h2>
+	<pre>$on(parentSelector, eventName, callback);</pre>
+	<p>This will execute <code>$all(...)</code> onto the selector and then it will attach a listenr for every matching
+		element.</p>
+	<pre>$live(parentSelector, eventName, callback);</pre>
+	<p>Will listen globally for the event that matches the selector: use this for dynamically created elements.</p>
+
+	<h2>Swipe</h2>
+	<p>This function can handle simple swipe cases. The callback will receive two parameters: 1) direction of the swipe
+		(left, right, up, down); 2) the last "<i>touchend</i>" event;</p>
+	<pre>$detectSwipe(el, callback, treshold);</pre>
+	<p>Switch to mobile preview to see those events in the console's log.</p>
+
+	<h2>CSS Classes</h2>
+	<p>Clich the button to practices with classes:</p>
+		<button id="add-class">Add Class</button>
+		<button id="remove-class" class="red">Remove Class</button>
+		<button id="toggle-class" class="red">Toggle Class + Has Class</button>
+	<p>&nbsp;</p>
+	<p>Clich the button to alternate the display style of two buttons:</p>
+	<button class="toggle-show-hide">Button 1</button>
+	<button class="toggle-show-hide" style="display:none">Button 2</button>
+
+
+</div>
+
+
+<script>
+	$onLoad(function () {
+		console.log('$onLoad');
+	});
+	$onReady(function () {
+		console.log('$onReady');
+	});
+
+	$onReady(function () {
+
+		console.log('$one', $one('#single-element'));
+		console.log('$find', $find($one('#single-element'), 'span'));
+
+		console.log('$all', $all('h2'));
+		$forEach($all('h2'), function (ev) {
+			console.log('$forEach', ev);
+		});
+
+		$on(null, 'test', function (ev) {
+			console.log('$on document test', ev);
+		});
+		$triggerEvent(null, 'test');
+
+		$on('h2', 'click', function (ev) {
+			console.log('$on h2 click', ev);
+		});
+
+		$onSwipe(null,function(direction,ev){
+			console.log('$onSwipe direction+ev:',direction,ev);
+		});
+
+		// Classes
+		$on('#add-class','click',function(ev){
+			$addClass(ev.target,'red');
+		});
+		$on('#remove-class','click',function(ev){
+			$removeClass(ev.target,'red');
+		});
+		$on('#toggle-class','click',function(ev){
+			console.log('has-class before', $hasClass(ev.target,'red'));
+			$toggleClass(ev.target,'red');
+			console.log('has-class after', $hasClass(ev.target,'red'));
+		});
+
+		var shoHideStatus = false;
+		var btnShowHide = $all('.toggle-show-hide');
+		$on('.toggle-show-hide','click',function(ev){
+			if (shoHideStatus) {
+				$show(btnShowHide[0]);
+				$hide(btnShowHide[1]);
+			} else {
+				$hide(btnShowHide[0]);
+				$show(btnShowHide[1]);
+			}
+			shoHideStatus = !shoHideStatus;
+		});
+
+	});
+</script>
+
+</body>
+</html>

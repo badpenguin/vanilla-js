@@ -1,30 +1,35 @@
-function $copyright(title) {
+
+function $copyright(title, callback) {
 
 	var self = {};
 	self.title = title || 'This material is copyright by the author - All Right Reserved';
 
+	self.notify = function () {
+		console.warn(self.title);
+		if (isFunction(callback)) {
+			callback(self.title);
+		}
+	}
+
 	// Sorry, i really don't want right click on my website
-	document.body.addEventListener('contextmenu', function (ev) {
-		console.warn(self.title);
+	window.document.addEventListener('contextmenu', function (ev) {
 		ev.preventDefault();
+		self.notify();
 		return false;
 	}, false);
 
 
-	document.body.addEventListener('copy', function (ev) {
-		console.warn(self.title);
+	window.document.addEventListener('copy', function (ev) {
 		ev.preventDefault();
-
 		ev.clipboardData.setData('text/plain', self.title);
-
+		self.notify();
 		return false;
 	}, false);
 
 
-
-	document.body.addEventListener('dragstart', function (ev) {
-		console.warn(self.title);
+	window.document.addEventListener('dragstart', function (ev) {
 		ev.preventDefault();
+		self.notify();
 		return false;
 	}, false);
 

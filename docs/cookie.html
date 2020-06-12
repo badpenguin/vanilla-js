@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Core JS - Vanilla JS Tests</title>
+	<meta charset="UTF-8">
+	<meta name="viewport"
+			content="width=device-width, user-scalable=no,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
+	<link href="vanilla.min.css" rel="stylesheet" type="text/css"/>
+	<link href="menu.css" rel="stylesheet" type="text/css"/>
+	<script type="text/javascript" src="vanilla-js.min.js"></script>
+	<script type="text/javascript" src="menu.js"></script>
+
+</head>
+<body class="test">
+
+<div class="container-small fluid">
+
+	<h1>Cookies</h1>
+	<pre id="cookie-list"></pre>
+
+	<button id="get-cookie">Get Cookie</button>
+	<button id="add-cookie" >Add Cookie</button>
+	<button id="remove-cookie">Remove Cookie</button>
+</div>
+
+
+<script>
+	$onLoad(function () {
+		console.log('$onLoad');
+
+		var cookieListDom = $one('#cookie-list');
+
+		var doGetCookie = function() {
+			var test1 = getCookie('test1');
+			console.log('test1',test1);
+			cookieListDom.innerHTML = 'test1: '+ JSON.stringify(test1);
+		}
+
+		doGetCookie();
+
+		// Classes
+		$on('#get-cookie','click', doGetCookie);
+
+		$on('#add-cookie','click',function(ev){
+			console.log('setCookie');
+			var d = new Date();
+			setCookie('test1', d.getTime(), 1);
+			doGetCookie();
+		});
+
+		$on('#remove-cookie','click',function(ev){
+			console.log('removeCookie');
+			removeCookie('test1');
+			doGetCookie();
+		});
+
+	});
+</script>
+
+</body>
+</html>

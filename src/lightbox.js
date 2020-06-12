@@ -1,3 +1,25 @@
+/**
+ * I tried first the url below but it was too complicated:
+ * https://css-tricks.com/prevent-page-scrolling-when-a-modal-is-open/
+ *
+ * I prefer to use touch-action that already solved the problem in Android/Chrome but not in Safari
+ */
+
+function $disableScreenScrolling() {
+	document.body.style.touchAction = 'none';
+	$addClass(document.body, 'bp-disable-scroll');
+}
+
+
+/**
+ * Restore previous state
+ */
+function $restoreScreenScrolling() {
+	document.body.style.touchAction = '';
+	$removeClass(document.body, 'bp-disable-scroll');
+}
+
+
 var lightboxInstanceCount = 0;
 
 function $lightbox(mainSelector, childSelector) {
@@ -31,11 +53,11 @@ function $lightbox(mainSelector, childSelector) {
 	 */
 	self.insertCss = function () {
 
-		if ($('#lightbox-inline-css')) {
+		if ($one('#lightbox-inline-css')) {
 			return;
 		}
 
-		$prepend(
+		$prependHead(
 			'<style id="lightbox-inline-css">' +
 			'.lightbox-modal{position:fixed;top:0;left:0;width:100%;height:100%;background:#000;z-index:2;pointer-events:none;opacity:0;transform:scale(0);transition:opacity .4s ease-in-out, transform .3s ease-in-out;}' +
 			'.lightbox-modal.open{pointer-events:auto;display:block;opacity:1;transform:scale(1);}' +
@@ -59,7 +81,7 @@ function $lightbox(mainSelector, childSelector) {
 		lightboxInstanceCount++;
 		self.modalId = 'lightbox-modal-' + lightboxInstanceCount;
 
-		$append(
+		$appendBody(
 			'<div id="' + self.modalId + '" class="lightbox-modal">\n' +
 			'<figure><img alt=""><img alt=""><figcaption/></figure>\n' +
 			'<div class="lightbox-close">&times;</div>\n' +
@@ -78,7 +100,7 @@ function $lightbox(mainSelector, childSelector) {
 		self.insertModal();
 
 		// Cache HTMLElements that we need
-		self.modal = $('#' + self.modalId);
+		self.modal = $one('#' + self.modalId);
 		var tempImg = $find(self.modal, 'img');
 		self.modalImage1 = tempImg[0];
 		self.modalImage2 = tempImg[1];
@@ -90,7 +112,7 @@ function $lightbox(mainSelector, childSelector) {
 		/*
 		 * Detect Swipes
 		 */
-		$detectSwipe(self.modal, function (direction) {
+		$onSwipe(self.modal, function (direction) {
 			// Skip if not open
 			if (!self.isOpen) {
 				return;

@@ -1,46 +1,11 @@
 /*
- * Inspired by http://youmightnotneedjquery.com/
+ * Inspired by https://youmightnotneedjquery.com/
  */
+
 
 /*
- * document.readyState:
- * - loading
- * - interactive (DOMContentLoaded event)
- * - complete (load event)
- *
- * Shortcut:
- *  - document.documentElement => <HTML>
- *  - document.head
- *  - document.body
+ * Query the dom
  */
-
-var hasClassList = ('classList' in document.createElement('p'));
-
-
-/**
- * The "DOMContentLoaded" does not fire if it has already happened
- * @param {function} callback
- */
-function onPageReady(callback) {
-	if (document.readyState !== 'loading') {
-		callback();
-		return;
-	}
-	document.addEventListener('DOMContentLoaded', callback);
-}
-
-
-/**
- * The "load" event fires also if it has already happened
- * @param {function} callback
- */
-function onPageLoad(callback) {
-	if (document.readyState === 'complete') {
-		callback();
-		return;
-	}
-	window.addEventListener('load', callback);
-}
 
 
 /**
@@ -48,7 +13,18 @@ function onPageLoad(callback) {
  * @param {string}
  * @return {HTMLElement}
  */
-var $ = document.querySelector.bind(document);
+var $one = document.querySelector.bind(document);
+
+/**
+ * HTMLElement
+ * - getAttribute($name) / removeAttribute / setAttribute
+ * - innerHTML
+ * - textContent
+ * - outerHTML
+ * - nextElementSibling
+ * - children
+ * - parentNode
+ */
 
 
 /**
@@ -61,6 +37,35 @@ var $all = document.querySelectorAll.bind(document);
 
 
 /**
+ * Search inside an element
+ * @param {HTMLElement} el
+ * @param {string} selector
+ * @returns {*}
+ */
+function $find(el, selector) {
+	return el.querySelectorAll(selector);
+}
+
+/*
+ * NodeList Reference:
+ * NodeList.item() Returns an item in the list by its index, or null if the index is out-of-bounds
+ * NodeList.entries() Returns an iterator
+ * NodeList.forEach() Executes a provided function once per NodeList element.
+ * NodeList.keys()
+ * NodeList.values()
+ */
+
+/**
+ * Add the "first" method to the nodelist (used by lightbox)
+ * @returns {Node}
+ */
+NodeList.prototype.first = function () {
+	return this.item(0);
+};
+
+
+/**
+ * Process NodeList "each"
  * Todd Motto's suggests to avoid using [].forEach.call(...)
  * https://ultimatecourses.com/blog/ditch-the-array-foreach-call-nodelist-hack
  */
@@ -77,160 +82,132 @@ var $forEach = function (array, callback, scope) {
 };
 
 
-/*
- * NodeList Reference:
- * NodeList.item() Returns an item in the list by its index, or null if the index is out-of-bounds
- * NodeList.entries() Returns an iterator
- * NodeList.forEach() Executes a provided function once per NodeList element.
- * NodeList.keys()
- * NodeList.values()
- */
-
-/**
- * Add the "first" method to the nodelist
- * @returns {Node}
- */
-NodeList.prototype.first = function () {
-	return this.item(0);
-};
-
-
-/**
- * Search inside an element
- * @param {HTMLElement} el
- * @param {string} selector
- * @returns {*}
- */
-function $find(el, selector) {
-	return el.querySelectorAll(selector);
-}
-
-
-/**
- * Append STYLE into HEAD before stylesheets
- * @param htmlString
- */
-function $prepend(htmlString) {
-	document.head.insertAdjacentHTML('afterbegin', htmlString);
-}
-
-/**
- * Append HTML for modals at the end of the BODY tag
- * @param {string} htmlString
- */
-function $append(htmlString) {
-	document.body.insertAdjacentHTML('beforeend', htmlString);
-}
-
-
-/**
- * I tried first the url below but it was too complicated:
- * https://css-tricks.com/prevent-page-scrolling-when-a-modal-is-open/
- *
- * I prefer to use touch-action that already solved the problem in Android/Chrome but not in Safari
- */
-
-function $disableScreenScrolling() {
-	document.body.style.touchAction = 'none';
-	$addClass(document.body, 'bp-disable-scroll');
-}
-
-
-/**
- * Restore previous state
- */
-function $restoreScreenScrolling() {
-	document.body.style.touchAction = '';
-	$removeClass(document.body, 'bp-disable-scroll');
+var $allEach = function (selector, callback) {
+	var el = $all(selector);
+	if (!el) {
+		console.warn('$allEach selector not found');
+		return false;
+	}
+	$forEach(el, callback);
 }
 
 
 /*
- * HTMLElement manipulation
- */
-
-
-/**
- * @param {HTMLElement} el
- * @param stClass
- */
-function $addClass(el, stClass) {
-	if (hasClassList) {
-		el.classList.add(stClass);
-		return;
-	}
-	// Poor man add class, does not take care of duplicated items
-	el.className += ' ' + stClass;
-}
-
-
-/**
- * @param {HTMLElement} el
- * @param stClass
- * @returns {void|*}
- */
-function $removeClass(el, stClass) {
-	if (hasClassList) {
-		el.classList.remove(stClass);
-		return;
-	}
-	// Poor man remove class, does not take care of duplicated items
-	el.className = el.className.replace(new RegExp('(^|\\b)' + stClass.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
-}
-
-
-/**
+ * ============================= EVENTS ==============================
+ * document.readyState:
+ * - loading
+ * - interactive (DOMContentLoaded event)
+ * - complete (load event)
  *
- * @param {HTMLElement} el
- * @param stClass
- * @returns {boolean}
+ * Shortcut:
+ *  - document.documentElement => <HTML>
+ *  - document.head
+ *  - document.body
  */
-function $hasClass(el, stClass) {
-	if (hasClassList) {
-		return el.classList.contains(stClass);
+
+
+/**
+ * The "DOMContentLoaded" does not fire if it has already happened
+ * @param {function} callback
+ */
+function $onReady(callback) {
+	if (document.readyState !== 'loading') {
+		callback();
+		return;
 	}
-	return new RegExp('(^| )' + stClass + '( |$)', 'gi').test(el.className);
+	document.addEventListener('DOMContentLoaded', callback);
 }
 
 
 /**
- *
- * @param {HTMLElement} el
- * @param StClass
+ * The "load" event fires also if it has already happened
+ * @param {function} callback
  */
-function $toggleClass(el, StClass) {
-	if (el.classList) {
-		el.classList.toggle(StClass);
+function $onLoad(callback) {
+	if (document.readyState === 'complete') {
+		callback();
 		return;
 	}
-	// Poor man toggle class, does not take care of duplicated items
-	var classes = el.className.split(' ');
-	var existingIndex = classes.indexOf(StClass);
-	if (existingIndex >= 0) {
-		classes.splice(existingIndex, 1);
+	window.addEventListener('load', callback);
+}
+
+
+/**
+ * Generate an Event
+ * @param {HTMLElement|string|null} el
+ * @param stEventName
+ */
+function $triggerEvent(el, stEventName) {
+	var htmlElement;
+	if (el === null) {
+		htmlElement = window.document;
+	} else if (el instanceof HTMLElement) {
+		htmlElement = el;
+	} else if (typeof el === 'string' || el instanceof String) {
+		htmlElement = $one(el);
 	} else {
-		classes.push(StClass);
+		console.error('$triggerEvent invalid element', el);
+		return false;
 	}
-	el.className = classes.join(' ');
+
+	var event = document.createEvent('HTMLEvents'); // OLD: Event
+	event.initEvent(stEventName, true, true);
+	htmlElement.dispatchEvent(event);
+}
+
+
+// TODO: mouse click => https://gomakethings.com/how-to-simulate-a-click-event-with-javascript/
+
+/** TODO: custom event
+if (window.CustomEvent && typeof window.CustomEvent === 'function') {
+  var event = new CustomEvent('my-event', {detail: {some: 'data'}});
+} else {
+  var event = document.createEvent('CustomEvent');
+  event.initCustomEvent('my-event', true, true, {some: 'data'});
+}
+el.dispatchEvent(event);
+ */
+
+
+/**
+ * Attach an event listener on every element
+ * @param {string|HTMLElement|null} parentSelector
+ * @param {string} eventName
+ * @param {function} callback
+ */
+function $on(parentSelector, eventName, callback) {
+	if (parentSelector === null) {
+		document.addEventListener(eventName, function (ev) {
+			callback(ev, parentSelector);
+		}, false);
+		return;
+	}
+	if (parentSelector instanceof HTMLElement) {
+		parentSelector.addEventListener(eventName, function (ev) {
+			callback(ev, parentSelector);
+		}, false);
+		return;
+	}
+	$allEach(parentSelector, function (el) {
+		el.addEventListener(eventName, function (ev) {
+			callback(ev, el);
+		}, false);
+	});
 }
 
 
 /**
- *
- * @param {HTMLElement} el
+ * Attach an event globally
+ * @param {string} parentSelector
+ * @param {string} eventName
+ * @param {function} callback
  */
-function $hide(el) {
-	el.style.display = 'none';
-}
-
-
-/**
- *
- * @param {HTMLElement} el
- * @param {string} [displayType='']
- */
-function $show(el, displayType) {
-	el.style.display = displayType ? displayType : '';
+function $live(parentSelector, eventName, callback) {
+	document.addEventListener(eventName, function (ev) {
+		if (ev.target.matches(parentSelector)) {
+			callback(ev);
+		}
+	}, false);
 }
 
 
@@ -240,7 +217,15 @@ function $show(el, displayType) {
  * @param {function} callback
  * @param {int} [treshold=50]
  */
-function $detectSwipe(el, callback, treshold) {
+function $onSwipe(el, callback, treshold) {
+	if (el === null) {
+		el = window.document;
+	}
+	if (!el) {
+		console.error('$onSwipe invalid element');
+		return false;
+	}
+
 	var touchstartX = 0;
 	var touchstartY = 0;
 	var touchendX = 0;
@@ -280,40 +265,143 @@ function $detectSwipe(el, callback, treshold) {
 		}
 
 	});
+
+	return true;
 }
 
 
 /*
- * Event manipulation
+ * ============================= CSS CLASSES ==============================
  */
 
 
 /**
- *
- * @param {HTMLElement|string} el
- * @param stEventName
+ * @param {HTMLElement} el
+ * @param stClass
+ * @returns {boolean}
  */
-function $triggerEvent(el, stEventName) {
-	var event = document.createEvent('Event');
-	event.initEvent(stEventName, true, true);
-
-	var htmlElement = (typeof el === 'string' || el instanceof String) ? $(el) : el;
-	htmlElement.dispatchEvent(event);
+function $addClass(el, stClass) {
+	if (el) {
+		el.classList.add(stClass);
+		return true;
+	}
+	return false;
 }
 
 
 /**
- * Attach an event listener on every element
- * @param parentSelector
- * @param eventName
- * @param callback
+ * @param {HTMLElement} el
+ * @param stClass
+ * @returns {boolean}
  */
-function $on(parentSelector, eventName, callback) {
-	$all(parentSelector).forEach(function (el) {
-		el.addEventListener(eventName, function (ev) {
-			callback(ev, el);
-		}, false);
-	});
+function $removeClass(el, stClass) {
+	if (el) {
+		el.classList.remove(stClass);
+		return true;
+	}
+	return false;
+}
+
+
+/**
+ *
+ * @param {HTMLElement} el
+ * @param stClass
+ * @returns {boolean}
+ */
+function $hasClass(el, stClass) {
+	if (el) {
+		return el.classList.contains(stClass);
+	}
+	return false;
+}
+
+
+/**
+ *
+ * @param {HTMLElement} el
+ * @param StClass
+ * @returns {boolean}
+ */
+function $toggleClass(el, StClass) {
+	if (el) {
+		el.classList.toggle(StClass);
+		return true;
+	}
+	return false;
+}
+
+
+/*
+ * ============================= STYLE =============================
+ */
+/**
+ *
+ * @param {HTMLElement} el
+ */
+function $hide(el) {
+	if (el) {
+		el.style.display = 'none';
+		return true;
+	}
+	return false;
+}
+
+
+/**
+ *
+ * @param {HTMLElement} el
+ * @param {string} [displayType='']
+ */
+function $show(el, displayType) {
+	if (el) {
+		el.style.display = displayType ? displayType : '';
+		return true;
+	}
+	return false;
+}
+
+
+// TODO: height => parseFloat(getComputedStyle(el, null).height.replace("px", ""))
+// TODO: width => parseFloat(getComputedStyle(el, null).width.replace("px", ""))
+// TODO: offset => var rect = el.getBoundingClientRect(); {
+//          top: rect.top + document.body.scrollTop,
+//          left: rect.left + document.body.scrollLeft
+
+
+/*
+ * ============================= HTML CONTENT =============================
+ */
+
+function $empty(el) {
+	if (el) {
+		while (el.firstChild) {
+			el.removeChild(el.firstChild);
+		}
+	}
+}
+
+
+// TODO: $after = target.insertAdjacentElement('afterend', element);
+// TODO: parent.appendChild(el);
+// TODO: $before = target.insertAdjacentElement('beforebegin', element);
+// TODO: $remove itself = el.parentNode.removeChild(el);
+
+/**
+ * Append STYLE into HEAD before stylesheets
+ * @param htmlString
+ */
+function $prependHead(htmlString) {
+	document.head.insertAdjacentHTML('afterbegin', htmlString);
+}
+
+
+/**
+ * Append HTML for modals at the end of the BODY tag
+ * @param {string} htmlString
+ */
+function $appendBody(htmlString) {
+	document.body.insertAdjacentHTML('beforeend', htmlString);
 }
 
 
@@ -325,10 +413,44 @@ function $on(parentSelector, eventName, callback) {
 /**
  * Remove duplicate items from an array
  * @returns {*[]}
- */
 Array.prototype.unique = function () {
 	var seen = {};
 	return this.filter(function (item) {
 		return seen.hasOwnProperty(item) ? false : (seen[item] = true);
 	});
 };
+ */
+
+/**
+ * Remove duplicate items from an array
+ * https://vanillajstoolkit.com/helpers/dedupe/
+ * @returns {*[]}
+ */
+Array.prototype.unique = function () {
+	return this.filter(function (item, index, self) {
+		return self.indexOf(item) === index;
+	});
+};
+
+
+/**
+ * get a nested element of an object: getObject(obj,'p1.p2.p3');
+ * @param obj
+ * @param key
+ * @returns {string}
+ */
+function getObject(obj, key) {
+	return key.split(".").reduce(function (o, x) {
+		return (typeof o == "undefined" || o === null) ? o : o[x];
+	}, obj);
+}
+
+
+function isObject(value) {
+	return value != null && typeof value == 'object';
+}
+
+
+function isFunction(value) {
+	return typeof value == 'function'
+}
