@@ -147,16 +147,12 @@ $visibility('.animate-when-visible', {invisibleClass: 'reset-animation'}, functi
 			console.log(isVisibile ? '[visible]' : '[invisible]', el.tagName);
 		});
 
-		// Start Scroll detector
+		// Scroll detector - example
 
 		$on(null,'scroll-up',function(){console.warn('scroll-up');})
 		$on(null,'scroll-down',function(){console.warn('scroll-down');})
 		$on(null,'scroll-top',function(){console.warn('scroll-top');})
-
 		$scrollDetector();
-
-
-
 	});
 </script>
 

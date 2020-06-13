@@ -4,6 +4,8 @@
  * - https://jsonplaceholder.typicode.com/
  */
 
+// NOTE: This is unfinished.
+
 
 /**
  * @param {string} method

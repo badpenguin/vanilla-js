@@ -1,14 +1,14 @@
 /*
-TODO: Waiting for chrome to enable real lazyload support via loading="lazy" or loading="eager"
-TODO: Better add <noscript><img></noscript> for SEO
+TODO: Waiting for chrome to enable the real builtin lazyload support via loading="lazy" or loading="eager"
+TODO: Its better to add <noscript><img></noscript> to every image for SEO
 */
 
 
 function $lazyload(mainSelector, options) {
 
-// From https://corydowdy.com/blog/lazy-loading-images-with-intersection-observer
-// small polyfill for Microsoft Edge 15 isIntersecting property
-// see https://github.com/WICG/IntersectionObserver/issues/211#issuecomment-309144669
+	// From https://corydowdy.com/blog/lazy-loading-images-with-intersection-observer
+	// small polyfill for Microsoft Edge 15 isIntersecting property
+	// see https://github.com/WICG/IntersectionObserver/issues/211#issuecomment-309144669
 	if ('IntersectionObserver' in window &&
 		'IntersectionObserverEntry' in window &&
 		'intersectionRatio' in window.IntersectionObserverEntry.prototype &&
@@ -76,7 +76,6 @@ function $lazyload(mainSelector, options) {
 		 */
 		var intersectionConfig = {
 			rootMargin: '400px',
-			//rootMargin: '0px 0px -200px 0px',
 			threshold: 0
 		};
 

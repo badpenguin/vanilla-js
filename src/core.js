@@ -213,7 +213,7 @@ function $live(parentSelector, eventName, callback) {
 
 /**
  *
- * @param {HTMLElement} el
+ * @param {HTMLElement|Document} el
  * @param {function} callback
  * @param {int} [treshold=50]
  */
@@ -386,6 +386,7 @@ function $empty(el) {
 // TODO: parent.appendChild(el);
 // TODO: $before = target.insertAdjacentElement('beforebegin', element);
 // TODO: $remove itself = el.parentNode.removeChild(el);
+
 
 /**
  * Append STYLE into HEAD before stylesheets

@@ -8,4 +8,4 @@ Its currently used by the Bad Penguin's Wordpress Theme Framework (unreleased).
 
 DEMO: https://badpenguin.github.io/vanilla-js/
 
-Every file is a different functions so you can just use the one you needs toghter with core.js that is the only dependency.
+Every file is a different functions so you can just use the one you needs toghter with **core.js** that **is the only dependency**.

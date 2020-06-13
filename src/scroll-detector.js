@@ -2,7 +2,6 @@
 function $scrollDetector(offset) {
 
 	var lastPosition = window.pageYOffset;
-	//var offset = 100;
 	var lastEvent = '';
 	offset = offset ? offset : 100;
 

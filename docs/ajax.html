@@ -42,12 +42,12 @@
 
 	function doResponse(result,response) {
 		if (!result) {
-			console.error('doError',response);
+			console.error('$ajax response:',response);
 			id.innerHTML = '<b style="color:red">error</b>';
 			return;
 		}
 
-		console.log('doResponse',response);
+		console.log('$ajax response:',response);
 		id.innerHTML = response.responseText;
 	}
 

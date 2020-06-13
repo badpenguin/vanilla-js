@@ -70,7 +70,6 @@ function $lightbox(mainSelector, childSelector) {
 			'</style>'
 		);
 
-
 	};
 
 
@@ -475,8 +474,6 @@ function $lightbox(mainSelector, childSelector) {
 
 
 	self.insertCss();
-// Don't pre-insert markup at bootstrap, we'll handle it onclick
-//	self.insertModal();
 
 	/**
 	 * Main Event Handler
