@@ -145,8 +145,10 @@ function $triggerEvent(el, stEventName) {
 		htmlElement = el;
 	} else if (typeof el === 'string' || el instanceof String) {
 		htmlElement = $one(el);
+	} else if (el instanceof HTMLDocument) {
+		htmlElement = el;
 	} else {
-		console.error('$triggerEvent invalid element', el);
+		console.error('$triggerEvent invalid element', el, stEventName);
 		return false;
 	}
 

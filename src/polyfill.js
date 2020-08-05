@@ -2,7 +2,7 @@
 
 var hasClassList = ('classList' in document.createElement('p'));
 if (!hasClassList) {
-	console.error('[polyfill] no classList support', navigator.userAgent );
+	console.error('[polyfill] no classList support', navigator.userAgent);
 }
 
 /*
@@ -32,22 +32,10 @@ if (window.HTMLCollection && !HTMLCollection.prototype.forEach) {
 
 
 // lightbox.js requires el.matches()
-// https://github.com/mboughaba/element-matches-polyfill/blob/master/index.js
+// https://developer.mozilla.org/en-US/docs/Web/API/Element/matches
 if (!Element.prototype.matches) {
 	console.warn('[polyfill] Element.matches');
-	Element.prototype.matches =
-		Element.prototype.matchesSelector ||
-		Element.prototype.mozMatchesSelector ||
-		Element.prototype.msMatchesSelector ||
-		Element.prototype.oMatchesSelector ||
-		Element.prototype.webkitMatchesSelector ||
-		function (s) {
-			var matches = (this.document || this.ownerDocument).querySelectorAll(s),
-				i = matches.length;
-			while (--i >= 0 && matches.item(i) !== this) {
-			}
-			return i > -1;
-		};
+	Element.prototype.matches = Element.prototype.msMatchesSelector || Element.prototype.webkitMatchesSelector;
 }
 
 

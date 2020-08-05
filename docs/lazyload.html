@@ -13,12 +13,14 @@
 		img:not(.lazyloaded) {
 			min-height: 300px;
 		}
-
+		a.img-placeholder {
+			display: block;
+		}
 	</style>
 </head>
 <body>
 
-<div class="container container-small fluid">
+<div class="container-small container--outer entry-content ">
 
 	<h1>Lazy Load Images</h1>
 	<p>Lazy load the images using:</p>
@@ -36,7 +38,7 @@ $onReady(function () {
 
 	<h2>Example</h2>
 
-	<div class="grid grid-auto grid-gutter gallery1">
+	<div class="grid grid--auto grid--gutter gallery1">
 
 		<div class="cell s-1-1"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
 			dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex
@@ -46,7 +48,8 @@ $onReady(function () {
 		</p></div>
 
 		<div class="cell s-1-1">
-			<a href="https://source.unsplash.com/E_eWwM29wfU/800x600" title="Foto 1"><img width="800" height="600"
+
+			<a class="img-placeholder" href="https://source.unsplash.com/E_eWwM29wfU/800x600" title="Foto 1"><img width="800" height="600"
 					data-src="https://source.unsplash.com/E_eWwM29wfU/800x600" alt="Foto 1"></a>
 		</div>
 
@@ -58,7 +61,7 @@ $onReady(function () {
 		</p></div>
 
 		<div class="cell s-1-1">
-			<a href="https://source.unsplash.com/_UIN-pFfJ7c/800x600"><img width="800" height="600"
+			<a class="img-placeholder" href="https://source.unsplash.com/_UIN-pFfJ7c/800x600"><img width="800" height="600"
 					data-src="https://source.unsplash.com/_UIN-pFfJ7c/800x600" alt="Foto 2"></a>
 		</div>
 
@@ -70,7 +73,7 @@ $onReady(function () {
 		</p></div>
 
 		<div class="cell s-1-1">
-			<a href="https://source.unsplash.com/MsMISAIe8Qw/800x600"><img width="800" height="600"
+			<a class="img-placeholder" href="https://source.unsplash.com/MsMISAIe8Qw/800x600"><img width="800" height="600"
 					data-src="https://source.unsplash.com/MsMISAIe8Qw/800x600" title="Foto 3"></a>
 		</div>
 
@@ -82,7 +85,7 @@ $onReady(function () {
 		</p></div>
 
 		<div class="cell s-1-1">
-			<a id="foto1" href="https://source.unsplash.com/layMbSJ3YOE/800x600" title="Foto 1"><img width="800" height="600"
+			<a class="img-placeholder" id="foto1" href="https://source.unsplash.com/layMbSJ3YOE/800x600" title="Foto 1"><img width="800" height="600"
 					data-src="https://source.unsplash.com/layMbSJ3YOE/800x600"></a>
 		</div>
 
@@ -94,7 +97,7 @@ $onReady(function () {
 		</p></div>
 
 		<div class="cell s-1-1">
-			<a id="foto2" href="https://source.unsplash.com/IocJwyqRv3M/800x600"><img width="800" height="600"
+			<a class="img-placeholder" id="foto2" href="https://source.unsplash.com/IocJwyqRv3M/800x600"><img width="800" height="600"
 					data-src="https://source.unsplash.com/IocJwyqRv3M/800x600" alt="Foto 2"></a>
 		</div>
 
@@ -106,7 +109,7 @@ $onReady(function () {
 		</p></div>
 
 		<div class="cell s-1-1">
-			<a id="foto3" href="https://source.unsplash.com/NiyRORf8d8I/800x600"><img width="800" height="600"
+			<a class="img-placeholder" id="foto3" href="https://source.unsplash.com/NiyRORf8d8I/800x600"><img width="800" height="600"
 					data-src="https://source.unsplash.com/NiyRORf8d8I/800x600" title="Foto 3"></a>
 		</div>
 

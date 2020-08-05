@@ -60,11 +60,11 @@ function $lightbox(mainSelector, childSelector) {
 		$prependHead(
 			'<style id="lightbox-inline-css">' +
 			'.lightbox-modal{position:fixed;top:0;left:0;width:100%;height:100%;background:#000;z-index:2;pointer-events:none;opacity:0;transform:scale(0);transition:opacity .4s ease-in-out, transform .3s ease-in-out;}' +
-			'.lightbox-modal.open{pointer-events:auto;display:block;opacity:1;transform:scale(1);}' +
+			'.lightbox-modal.lightbox-modal--open{pointer-events:auto;display:block;opacity:1;transform:scale(1);}' +
 			'.lightbox-modal img{position:absolute;top:0;left:0;right:0;bottom:0;width:100%;height:100vh;object-fit:contain;opacity:0;transition:all .4s ease-in-out}' +
 			'.lightbox-close{position:absolute;top:10px;right:10px;font-size:3rem;cursor:pointer;}' +
 			'.lightbox-next,.lightbox-prev{position:absolute;top:calc(50% - 50px);font-size:6rem;line-height:100px;cursor:pointer;}' +
-			'.lightbox-modal.singleMode .lightbox-next,.lightbox-modal.singleMode .lightbox-prev{display:none}' +
+			'.lightbox-modal.lightbox-modal--single-mode .lightbox-next,.lightbox-modal.lightbox-modal--single-mode .lightbox-prev{display:none}' +
 			'.lightbox-next{right:10px;}' +
 			'.lightbox-prev{left:10px;}' +
 			'</style>'
@@ -321,7 +321,7 @@ function $lightbox(mainSelector, childSelector) {
 		// Switch to single mode if only one is found
 		if (self.images.length === 1) {
 			self.singleMode = true;
-			$addClass(self.modal, 'singleMode');
+			$addClass(self.modal, 'lightbox-modal--single-mode');
 		}
 
 	};
@@ -396,7 +396,7 @@ function $lightbox(mainSelector, childSelector) {
 
 		// Add class in background to trigger animation on slow mobile devices
 		setTimeout(function () {
-			$addClass(self.modal, 'open');
+			$addClass(self.modal, 'lightbox-modal--open');
 		}, 0);
 
 		self.preloadImages();
@@ -421,7 +421,7 @@ function $lightbox(mainSelector, childSelector) {
 	 */
 	self.hide = function () {
 		self.isOpen = false;
-		$removeClass(self.modal, 'open');
+		$removeClass(self.modal, 'lightbox-modal--open');
 		$restoreScreenScrolling();
 		// Hide both images
 		self.modalImage1.style.opacity = '0';

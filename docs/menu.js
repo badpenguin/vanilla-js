@@ -1,5 +1,4 @@
 var menu = [
-	['https://github.com/badpenguin/vanilla-js/', 'GitHub', 'text-bold'],
 	['core.html', 'Core JS', ''],
 	['ajax.html', 'Ajax', ''],
 	['cookie.html', 'Cookie', ''],
@@ -7,22 +6,23 @@ var menu = [
 
 	['lightbox.html', 'Lightbox', ''],
 
-	['visibility.html', 'Visibility &amp; Scroll', '']
+	['visibility.html', 'Visibility &amp; Scroll', ''],
+	['https://github.com/badpenguin/vanilla-js/', 'GitHub', 'text-bold'],
 ];
 
 
 function writeResponsiveMenu() {
 	var html = '<header>' +
-		'<div class="container-large fluid"><nav class="navbar navbar-toggle-on-small"><div class="navbar-logo"><h2><a href="index.html">Vanilla JS</a></h2></div><ul class="navbar-menu scrollable flex-center navbar-menu-left">';
+		'<div class="container-large container--outer"><nav class="navbar navbar--toggle-on-small"><div class="navbar-logo"><h2><a href="index.html">Vanilla JS</a></h2></div><ul class="navbar__menu navbar__menu--left">';
 
 	$forEach(menu, function (item) {
 		html += '<li class="' + item[2] + '"><a href="' + item[0] + '">' + item[1] + '</a></li>';
 	});
 
 	html +=
-		'</ul><div class="navbar-toggle"><label for="navbar-toggle">&#9776; Menu</label>' +
-		'<input type="checkbox" id="navbar-toggle"/><div class="navbar-overlay navbar-overlay__right">' +
-		'<label class="navbar-overlay-close" for="navbar-toggle">&times;</label><ul>'
+		'</ul><div class="navbar__toggle"><label for="navbar-toggle">&#9776; Menu</label>' +
+		'<input type="checkbox" id="navbar-toggle"/><div class="navbar__overlay navbar__overlay--right">' +
+		'<label class="navbar__overlay__close" for="navbar-toggle">&times;</label><ul>'
 	;
 
 	$forEach(menu, function (item) {

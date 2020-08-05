@@ -27,7 +27,7 @@ function $visibility(selector,options,callback) {
 
 	self.options = Object.assign({
 		invisibleClass: 'invisible',
-		visibleClass: 'animated',
+		visibleClass: 'animate--start',
 		easing: null
 	}, options);
 

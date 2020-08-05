@@ -35,21 +35,21 @@
 </head>
 <body class="test grid-debug test-grid-basic">
 
-<div class="container fluid">
+<div class="container container--outer entry-content ">
 
 	<h1>Visibility Test</h1>
 
 	<pre>
 $forEach(headers, function (el) {
-	$addClass(el, 'animate-slide-in-right');
-	$addClass(el, 'animate-2s');
-	$addClass(el, 'animate-when-visible');
+	$addClass(el, 'animate--slide-in-right');
+	$addClass(el, 'animate--2s');
+	$addClass(el, 'animate--when-visible');
 });
 
 $forEach(paragraphs, function (el) {
-	$addClass(el, 'animate-fade-in');
-	$addClass(el, 'animate-2s');
-	$addClass(el, 'animate-when-visible');
+	$addClass(el, 'animate--fade-in');
+	$addClass(el, 'animate--2s');
+	$addClass(el, 'animate--when-visible');
 });
 
 $visibility('.animate-when-visible', {invisibleClass: 'reset-animation'}, function (el, isVisibile) {
@@ -62,11 +62,11 @@ $visibility('.animate-when-visible', {invisibleClass: 'reset-animation'}, functi
 
 </div>
 
-<div class="container fluid">
+<div class="container container--outer">
 	<h1>We'll arrive in 1 second! Wait...</h1>
 </div>
 
-<div class="container fluid Xanimated XslideInUp">
+<div class="container container--outer Xanimated XslideInUp">
 
 	<div class="Xanimated Xinfinite Xpulse">
 		<h1 class="">Paragraph One</h1>
@@ -132,18 +132,18 @@ $visibility('.animate-when-visible', {invisibleClass: 'reset-animation'}, functi
 		var paragraphs = $all('.container > p');
 
 		$forEach(headers, function (el) {
-			$addClass(el, 'animate-slide-in-right');
-			$addClass(el, 'animate-2s');
-			$addClass(el, 'animate-when-visible');
+			$addClass(el, 'animate--slide-in-right');
+			$addClass(el, 'animate--2s');
+			$addClass(el, 'animate--when-visible');
 		});
 
 		$forEach(paragraphs, function (el) {
-			$addClass(el, 'animate-fade-in');
-			$addClass(el, 'animate-2s');
-			$addClass(el, 'animate-when-visible');
+			$addClass(el, 'animate--fade-in');
+			$addClass(el, 'animate--2s');
+			$addClass(el, 'animate--when-visible');
 		});
 
-		$visibility('.animate-when-visible', {invisibleClass: 'reset-animation'}, function (el, isVisibile) {
+		$visibility('.animate--when-visible', {invisibleClass: 'animate--reset'}, function (el, isVisibile) {
 			console.log(isVisibile ? '[visible]' : '[invisible]', el.tagName);
 		});
 

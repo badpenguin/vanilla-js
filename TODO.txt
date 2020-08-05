@@ -1,3 +1,6 @@
+- includere vanilla-css via SCSS
+- test lazyload.js with img-placeholder
+
 Refactor plugin using: https://gomakethings.com/the-anatomy-of-a-vanilla-javascript-plugin/
     => https://vanillajstoolkit.com/boilerplates/umd/
     - https://vanillajstoolkit.com/boilerplates/revealing-module-pattern/
