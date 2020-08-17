@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Core JS - Vanilla JS Tests</title>
+	<meta charset="UTF-8">
+	<meta name="viewport"
+			content="width=device-width, user-scalable=no,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
+	<link href="vanilla.min.css" rel="stylesheet" type="text/css"/>
+	<link href="menu.css" rel="stylesheet" type="text/css"/>
+	<script type="text/javascript" src="vanilla-js.min.js"></script>
+	<script type="text/javascript" src="menu.js"></script>
+	<style>
+		.red {background-color: rgba(255,0,0,.5);}
+	</style>
+
+</head>
+<body class="test">
+
+
+<div class="container-small fluid">
+
+	<h1>Ajax</h1>
+	<p>Watch the console's log and the source code to see it in action.</p>
+
+	<p>Testing with https://jsonplaceholder.typicode.com/ and http://ip.jsontest.com/</p>
+	<div id="post-container">Will load soon</div>
+
+	<pre>
+		$ajax( method, url, options, callback);
+	</pre>
+	<ul>
+		<li>pass options to manipulate the behavios</li>
+		<li>callback has 2 parameters: (boolean: result, raw response)</li>
+	</ul>
+
+</div>
+
+
+<script>
+
+	var id = $one('#post-container');
+
+	function doResponse(result,response) {
+		if (!result) {
+			console.error('$ajax response:',response);
+			id.innerHTML = '<b style="color:red">error</b>';
+			return;
+		}
+
+		console.log('$ajax response:',response);
+		id.innerHTML = response.responseText;
+	}
+
+	$onLoad(function () {
+		$empty(id);
+		id.innerHTML='<i>Loading...</i>';
+
+		$ajax('GET','http://ip.jsontest.com/',null, doResponse);
+
+	});
+</script>
+
+</body>
+</html>

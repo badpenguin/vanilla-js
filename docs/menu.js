@@ -1,9 +1,13 @@
 var menu = [
 	['https://github.com/badpenguin/vanilla-js/', 'GitHub', 'text-bold'],
-	['main.html', 'Basic JS', ''],
-	['lightbox.html', 'Lightbox', ''],
+	['core.html', 'Core JS', ''],
+	['ajax.html', 'Ajax', ''],
+	['cookie.html', 'Cookie', ''],
 	['lazyload.html', 'Lazy Load', ''],
-	['visibility.html', 'Visibility', '']
+
+	['lightbox.html', 'Lightbox', ''],
+
+	['visibility.html', 'Visibility &amp; Scroll', '']
 ];
 
 
@@ -11,7 +15,7 @@ function writeResponsiveMenu() {
 	var html = '<header>' +
 		'<div class="container-large fluid"><nav class="navbar navbar-toggle-on-small"><div class="navbar-logo"><h2><a href="index.html">Vanilla JS</a></h2></div><ul class="navbar-menu scrollable flex-center navbar-menu-left">';
 
-	[].forEach.call(menu, function (item) {
+	$forEach(menu, function (item) {
 		html += '<li class="' + item[2] + '"><a href="' + item[0] + '">' + item[1] + '</a></li>';
 	});
 
@@ -21,7 +25,7 @@ function writeResponsiveMenu() {
 		'<label class="navbar-overlay-close" for="navbar-toggle">&times;</label><ul>'
 	;
 
-	[].forEach.call(menu, function (item) {
+	$forEach(menu, function (item) {
 		html += '<li class="' + item[2] + '"><a href="' + item[0] + '">' + item[1] + '</a></li>';
 	});
 
@@ -30,9 +34,9 @@ function writeResponsiveMenu() {
 }
 
 
-onPageReady(function () {
+$onReady(function () {
 
 	document.body.insertAdjacentHTML('afterbegin', writeResponsiveMenu());
 
-	$append('<footer><a href="https://github.com/badpenguin/vanilla-js/">Download from GitHub</a></footer>');
+	$appendBody('<footer><a href="https://github.com/badpenguin/vanilla-js/">Download from GitHub</a></footer>');
 });

@@ -23,7 +23,7 @@
 	<h1>Lazy Load Images</h1>
 	<p>Lazy load the images using:</p>
 	<pre>
-onPageReady(function () {
+$onReady(function () {
 	// This website
 	$lazyload('.grid .cell img');
 	// Wordpress
@@ -46,7 +46,7 @@ onPageReady(function () {
 		</p></div>
 
 		<div class="cell s-1-1">
-			<a href="https://source.unsplash.com/E_eWwM29wfU/800x600" title="Foto 1"><img
+			<a href="https://source.unsplash.com/E_eWwM29wfU/800x600" title="Foto 1"><img width="800" height="600"
 					data-src="https://source.unsplash.com/E_eWwM29wfU/800x600" alt="Foto 1"></a>
 		</div>
 
@@ -58,7 +58,7 @@ onPageReady(function () {
 		</p></div>
 
 		<div class="cell s-1-1">
-			<a href="https://source.unsplash.com/_UIN-pFfJ7c/800x600"><img
+			<a href="https://source.unsplash.com/_UIN-pFfJ7c/800x600"><img width="800" height="600"
 					data-src="https://source.unsplash.com/_UIN-pFfJ7c/800x600" alt="Foto 2"></a>
 		</div>
 
@@ -70,7 +70,7 @@ onPageReady(function () {
 		</p></div>
 
 		<div class="cell s-1-1">
-			<a href="https://source.unsplash.com/MsMISAIe8Qw/800x600"><img
+			<a href="https://source.unsplash.com/MsMISAIe8Qw/800x600"><img width="800" height="600"
 					data-src="https://source.unsplash.com/MsMISAIe8Qw/800x600" title="Foto 3"></a>
 		</div>
 
@@ -82,7 +82,7 @@ onPageReady(function () {
 		</p></div>
 
 		<div class="cell s-1-1">
-			<a id="foto1" href="https://source.unsplash.com/layMbSJ3YOE/800x600" title="Foto 1"><img
+			<a id="foto1" href="https://source.unsplash.com/layMbSJ3YOE/800x600" title="Foto 1"><img width="800" height="600"
 					data-src="https://source.unsplash.com/layMbSJ3YOE/800x600"></a>
 		</div>
 
@@ -94,7 +94,7 @@ onPageReady(function () {
 		</p></div>
 
 		<div class="cell s-1-1">
-			<a id="foto2" href="https://source.unsplash.com/IocJwyqRv3M/800x600"><img
+			<a id="foto2" href="https://source.unsplash.com/IocJwyqRv3M/800x600"><img width="800" height="600"
 					data-src="https://source.unsplash.com/IocJwyqRv3M/800x600" alt="Foto 2"></a>
 		</div>
 
@@ -106,7 +106,7 @@ onPageReady(function () {
 		</p></div>
 
 		<div class="cell s-1-1">
-			<a id="foto3" href="https://source.unsplash.com/NiyRORf8d8I/800x600"><img
+			<a id="foto3" href="https://source.unsplash.com/NiyRORf8d8I/800x600"><img width="800" height="600"
 					data-src="https://source.unsplash.com/NiyRORf8d8I/800x600" title="Foto 3"></a>
 		</div>
 
@@ -122,8 +122,8 @@ onPageReady(function () {
 
 <script>
 
-	onPageReady(function () {
-		//$lazyload('.wp-block-gallery img,.wp-block-image img');
+	$onReady(function () {
+		// On wordpress you can use: $lazyload('.wp-block-gallery img,.wp-block-image img');
 		$lazyload('.grid .cell img');
 	});
 

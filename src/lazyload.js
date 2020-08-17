@@ -1,5 +1,26 @@
+/*
+TODO: Waiting for chrome to enable the real builtin lazyload support via loading="lazy" or loading="eager"
+TODO: Its better to add <noscript><img></noscript> to every image for SEO
+*/
+
 
 function $lazyload(mainSelector, options) {
+
+	// From https://corydowdy.com/blog/lazy-loading-images-with-intersection-observer
+	// small polyfill for Microsoft Edge 15 isIntersecting property
+	// see https://github.com/WICG/IntersectionObserver/issues/211#issuecomment-309144669
+	if ('IntersectionObserver' in window &&
+		'IntersectionObserverEntry' in window &&
+		'intersectionRatio' in window.IntersectionObserverEntry.prototype &&
+		!('isIntersecting' in IntersectionObserverEntry.prototype)) {
+
+		Object.defineProperty(window.IntersectionObserverEntry.prototype, 'isIntersecting', {
+			get: function () {
+				return this.intersectionRatio > 0
+			}
+		})
+	}
+
 
 	var self = {};
 
@@ -43,7 +64,12 @@ function $lazyload(mainSelector, options) {
 	};
 
 
-	onPageReady(function () {
+	$onReady(function () {
+
+		if (!('IntersectionObserver' in window)) {
+			console.warn('[$onReady] $lazyload: not supported.');
+			return;
+		}
 
 		if (!('IntersectionObserver' in window)) {
 			console.warn('[onPageReady] $lazyload: not supported.');
@@ -55,7 +81,6 @@ function $lazyload(mainSelector, options) {
 		 */
 		var intersectionConfig = {
 			rootMargin: '400px',
-			//rootMargin: '0px 0px -200px 0px',
 			threshold: 0
 		};
 
@@ -101,7 +126,7 @@ function $lazyload(mainSelector, options) {
 
 		// Detach
 		if (self.options.autoLoad) {
-			onPageLoad(function () {
+			$onLoad(function () {
 
 				self.images.forEach(function (el, index) {
 					var timeout = (index + 2) * 1000;
@@ -119,20 +144,4 @@ function $lazyload(mainSelector, options) {
 
 	// We don't have a public interface yet
 	return {};
-}
-
-
-// From https://corydowdy.com/blog/lazy-loading-images-with-intersection-observer
-// small polyfill for Microsoft Edge 15 isIntersecting property
-// see https://github.com/WICG/IntersectionObserver/issues/211#issuecomment-309144669
-if ('IntersectionObserver' in window &&
-	'IntersectionObserverEntry' in window &&
-	'intersectionRatio' in window.IntersectionObserverEntry.prototype &&
-	!('isIntersecting' in IntersectionObserverEntry.prototype)) {
-
-	Object.defineProperty(window.IntersectionObserverEntry.prototype, 'isIntersecting', {
-		get: function () {
-			return this.intersectionRatio > 0
-		}
-	})
 }
