@@ -1,5 +1,5 @@
 /*
- * Inspired by http://youmightnotneedjquery.com/
+ * Inspired by https://youmightnotneedjquery.com/
  */
 
 /*
@@ -170,6 +170,10 @@ function $addClass(el, stClass) {
  * @returns {void|*}
  */
 function $removeClass(el, stClass) {
+	if (!el) {
+		console.warn('$removeClass with an invalid element',el);
+		return;
+	}
 	if (hasClassList) {
 		el.classList.remove(stClass);
 		return;

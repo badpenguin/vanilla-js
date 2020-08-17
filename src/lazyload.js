@@ -3,7 +3,9 @@ function $lazyload(mainSelector, options) {
 
 	var self = {};
 
-	if (!"IntersectionObserver" in window) {
+	if (!('IntersectionObserver' in window) ||
+		!('IntersectionObserverEntry' in window) ||
+		!('intersectionRatio' in window.IntersectionObserverEntry.prototype)) {
 		console.warn('$lazyload: not supported.');
 		return;
 	}
@@ -42,6 +44,11 @@ function $lazyload(mainSelector, options) {
 
 
 	onPageReady(function () {
+
+		if (!('IntersectionObserver' in window)) {
+			console.warn('[onPageReady] $lazyload: not supported.');
+			return;
+		}
 
 		/*
 		 * Google WebDeveloper Code
