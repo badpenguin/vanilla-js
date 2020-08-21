@@ -18,4 +18,3 @@ closure-compiler \
     --js_output_file docs/vanilla-js.min.js --create_source_map docs/vanilla-js.min.js.map
 
 cp -v docs/vanilla-js.min.js* dist/
-

@@ -9,11 +9,20 @@
 
 
 /**
- * "Replace" Jquery - BUT Returns a single HTMLElement
+ * "Replace" Jquery "$" - BUT Returns a single HTMLElement
  * @param {string}
  * @return {HTMLElement}
  */
 var $one = document.querySelector.bind(document);
+
+
+/**
+ * Faster then $one
+ * @param {string}
+ * @return {HTMLElement}
+ */
+var $id = document.getElementById.bind(document);
+
 
 /**
  * HTMLElement
@@ -82,6 +91,10 @@ var $forEach = function (array, callback, scope) {
 };
 
 
+/**
+ * @param {string} selector
+ * @param {function} callback
+ */
 var $allEach = function (selector, callback) {
 	var el = $all(selector);
 	if (!el) {
@@ -135,7 +148,7 @@ function $onLoad(callback) {
 /**
  * Generate an Event
  * @param {HTMLElement|string|null} el
- * @param stEventName
+ * @param {string} stEventName
  */
 function $triggerEvent(el, stEventName) {
 	var htmlElement;
@@ -215,9 +228,9 @@ function $live(parentSelector, eventName, callback) {
 
 /**
  *
- * @param {HTMLElement} el
+ * @param {HTMLElement|Document} el
  * @param {function} callback
- * @param {int} [treshold=50]
+ * @param {int} [treshold]
  */
 function $onSwipe(el, callback, treshold) {
 	if (el === null) {
@@ -279,7 +292,7 @@ function $onSwipe(el, callback, treshold) {
 
 /**
  * @param {HTMLElement} el
- * @param stClass
+ * @param {string} stClass
  * @returns {boolean}
  */
 function $addClass(el, stClass) {
@@ -293,7 +306,7 @@ function $addClass(el, stClass) {
 
 /**
  * @param {HTMLElement} el
- * @param stClass
+ * @param {string} stClass
  * @returns {boolean}
  */
 function $removeClass(el, stClass) {
@@ -308,7 +321,7 @@ function $removeClass(el, stClass) {
 /**
  *
  * @param {HTMLElement} el
- * @param stClass
+ * @param {string} stClass
  * @returns {boolean}
  */
 function $hasClass(el, stClass) {
@@ -322,7 +335,7 @@ function $hasClass(el, stClass) {
 /**
  *
  * @param {HTMLElement} el
- * @param StClass
+ * @param {string} StClass
  * @returns {boolean}
  */
 function $toggleClass(el, StClass) {
@@ -353,7 +366,7 @@ function $hide(el) {
 /**
  *
  * @param {HTMLElement} el
- * @param {string} [displayType='']
+ * @param {string} [displayType]
  */
 function $show(el, displayType) {
 	if (el) {
@@ -375,6 +388,10 @@ function $show(el, displayType) {
  * ============================= HTML CONTENT =============================
  */
 
+/**
+ * Remove all child from an element, usefull for SELECT
+ * @param {HTMLElement} el
+ */
 function $empty(el) {
 	if (el) {
 		while (el.firstChild) {
@@ -390,8 +407,22 @@ function $empty(el) {
 // TODO: $remove itself = el.parentNode.removeChild(el);
 
 /**
+ * Append a new option to a select
+ * @param {HTMLSelectElement} selectElement
+ * @param {string|int} value
+ * @param {string} content
+ */
+function $addOption(selectElement, value, content) {
+	var opt = document.createElement('option');
+	opt.appendChild( document.createTextNode(content) );
+	opt.value = value;
+	selectElement.appendChild(opt);
+}
+
+
+/**
  * Append STYLE into HEAD before stylesheets
- * @param htmlString
+ * @param {string} htmlString
  */
 function $prependHead(htmlString) {
 	document.head.insertAdjacentHTML('afterbegin', htmlString);
@@ -437,8 +468,8 @@ Array.prototype.unique = function () {
 
 /**
  * get a nested element of an object: getObject(obj,'p1.p2.p3');
- * @param obj
- * @param key
+ * @param {Object} obj
+ * @param {string} key
  * @returns {string}
  */
 function getObject(obj, key) {
@@ -448,11 +479,21 @@ function getObject(obj, key) {
 }
 
 
+/**
+ *
+ * @param {Object} value
+ * @returns {boolean|boolean}
+ */
 function isObject(value) {
 	return value != null && typeof value == 'object';
 }
 
 
+/**
+ *
+ * @param {function} value
+ * @returns {boolean}
+ */
 function isFunction(value) {
 	return typeof value == 'function'
 }
