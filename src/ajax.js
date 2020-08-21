@@ -32,7 +32,7 @@ var $ajax = function (method, url, options, callback) {
 
 	var data = options.data || null;
 	var has_debug = options.debug || false;
-	var responseType = options.responseType || false;
+	var responseType = options.responseType ? options.responseType.toLowerCase : false;
 
 	// TODO automatically turn on if data is an instance of string?
 	if (options['sendUrlencoded']) {
@@ -51,7 +51,6 @@ var $ajax = function (method, url, options, callback) {
 		data = tempdata.join('&').replace(/%20/g, '+');
 	}
 
-	// TODO
 	// TODO automatically turn on if data is an instance of FormData?
 	if (options['sendFormData']) {
 		request.setRequestHeader('Content-Type', 'multipart/form-data'); // TODO: charset?
@@ -69,12 +68,10 @@ var $ajax = function (method, url, options, callback) {
 	}
 
 	if (options.headers) {
-		console.warn('TODO headers'); // TODO
 		for (var k2 in options.headers) {
 			if (!options.headers.hasOwnProperty(k2)) {
 				continue;
 			}
-			console.warn('k,v', k2, options.headers[k2]); // TODO
 			request.setRequestHeader(k2, options.headers[k2]);
 		}
 	}
@@ -108,7 +105,22 @@ var $ajax = function (method, url, options, callback) {
 			console.log('[$ajax] onload', request.status, request.statusText);
 		}
 		var success = request.status>=200 && request.status<300;
-		callback(success, request);
+
+		var final = {
+			status: request.status,
+			response: request.response,
+			responseType: request.responseType
+		};
+
+		// IE11 does not support json :-(
+		if (responseType==='json') {
+			if (typeof(request.response) === 'string') {
+				final.response = JSON.parse(request.response);
+				final.responseType = 'json';
+			}
+		}
+
+		callback(success, final);
 	};
 
 	request.onabort = function () {
@@ -138,7 +150,7 @@ var $ajax = function (method, url, options, callback) {
 };
 
 // TODO: append time to get request to avoid cache (new Date()).getTime());
-// TODO: var response = JSON.parse(this.response);
+
 /*
  TODO: Fetch image as blob
 	xhr.open('GET', '/path/to/image.png', true);
