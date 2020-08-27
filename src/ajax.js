@@ -32,7 +32,7 @@ var $ajax = function (method, url, options, callback) {
 
 	var data = options.data || null;
 	var has_debug = options.debug || false;
-	var responseType = options.responseType ? options.responseType.toLowerCase : false;
+	var responseType = options.responseType || false;
 
 	// TODO automatically turn on if data is an instance of string?
 	if (options['sendUrlencoded']) {
