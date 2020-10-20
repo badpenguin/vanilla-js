@@ -34,6 +34,9 @@ var $ajax = function (method, url, options, callback) {
 	var has_debug = options.debug || false;
 	var responseType = options.responseType || false;
 
+	// Add for compatibility
+	request.setRequestHeader('X-Requested-With', 'XMLHttpRequest' );
+
 	// TODO automatically turn on if data is an instance of string?
 	if (options['sendUrlencoded']) {
 		request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
@@ -120,24 +123,30 @@ var $ajax = function (method, url, options, callback) {
 			}
 		}
 
-		callback(success, final);
+		// Parse our custom payload format, i.e. {error:0/1, message:'string', payload: object}
+		var payload = null;
+		if (final.hasOwnProperty('response') && final.response.hasOwnProperty('error') && final.response.hasOwnProperty('payload')) {
+			payload = final.response.error===0 ? final.response.payload : false;
+		}
+
+		callback(success, final, payload);
 	};
 
 	request.onabort = function () {
 		// There was a connection error of some sort
 		console.warn('[$ajax] onabort', request.status, request.statusText);
-		callback(false, request);
+		callback(false, request, null);
 	};
 
 	request.onerror = function () {
 		// There was a connection error of some sort
 		console.error('[$ajax] onerror', request.status, request.statusText);
-		callback(false, request);
+		callback(false, request, null);
 	};
 
 	request.ontimeout = function () {
 		console.error('[$ajax] ontimeout', request.status, request.statusText);
-		callback(false, request);
+		callback(false, request, null);
 	};
 
 	if (options.data) {
