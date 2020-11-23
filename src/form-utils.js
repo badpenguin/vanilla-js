@@ -1,4 +1,3 @@
-
 function $addClasses(el, classes) {
 	if (el) {
 		var list = classes.split(' ');
@@ -54,7 +53,6 @@ if (!Array.isArray) {
 		return Object.prototype.toString.call(arg) === '[object Array]';
 	};
 }
-
 
 
 /*var $isNodelist = function(value) {
@@ -113,11 +111,18 @@ function $scrollIntoView(el, offset) {
 
 	if ('scrollBehavior' in document.documentElement.style) {
 		// NOTE: options are not supported by IE11 and Safari
-		el.scrollIntoView(
-			{block: 'center'}
-		);
+
+		try {
+			el.scrollIntoView(
+				{block: 'center'}
+			);
+		} catch (e) {
+			console.warn('scrollIntoView failed', e);
+			el.scrollIntoView(false);
+		}
 
 		return true;
+
 	}
 
 	if (window.hasOwnProperty('scroll')) {
@@ -213,16 +218,16 @@ function $formFieldRequired(value) {
  * @param {string} value
  * @returns {string|boolean}
  */
-function $formFieldLength(min,max,value) {
+function $formFieldLength(min, max, value) {
 	if (!$isString(value)) {
 		return 'Tipo di dato non valido';
 	}
 	var l = value.trim().length;
-	if (l<min) {
-		return 'La lunghezza minima è di '+ min+ ' caratteri.';
+	if (l < min) {
+		return 'La lunghezza minima è di ' + min + ' caratteri.';
 	}
-	if (l>max) {
-		return 'La lunghezza massimma è di '+ min+ ' caratteri.';
+	if (l > max) {
+		return 'La lunghezza massimma è di ' + min + ' caratteri.';
 	}
 	return true;
 }
@@ -240,7 +245,6 @@ function $formFieldEmail(value) {
 }
 
 
-
 /*
  * ============== Functions Used To Decorate Form's Fields ===========
  */
@@ -256,7 +260,7 @@ function $formDecorateFieldAsNumeric(selector, pattern) {
 	//field.setAttribute('inputmode','numeric');
 	//field.setAttribute('pattern','[0-9]*');
 	// Better...
-	field.setAttribute('inputmode','decimal');
+	field.setAttribute('inputmode', 'decimal');
 
 	// With Decimal
 	pattern = pattern || '[0-9.+-]';
