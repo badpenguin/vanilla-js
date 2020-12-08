@@ -34,8 +34,6 @@ var $ajax = function (method, url, options, callback) {
 	var has_debug = options.debug || false;
 	var responseType = options.responseType || false;
 
-	// Add for compatibility
-	request.setRequestHeader('X-Requested-With', 'XMLHttpRequest' );
 
 	// TODO automatically turn on if data is an instance of string?
 	if (options['sendUrlencoded']) {
@@ -69,6 +67,13 @@ var $ajax = function (method, url, options, callback) {
 			responseType = 'json';
 		}
 	}
+
+
+	// Add for compatibility
+	if (options['sendJson'] || options['cors']) {
+		request.setRequestHeader('X-Requested-With', 'XMLHttpRequest' );
+	}
+
 
 	if (options.headers) {
 		for (var k2 in options.headers) {
