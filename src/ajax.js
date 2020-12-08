@@ -68,12 +68,10 @@ var $ajax = function (method, url, options, callback) {
 		}
 	}
 
-
 	// Add for compatibility
 	if (options['sendJson'] || options['cors']) {
 		request.setRequestHeader('X-Requested-With', 'XMLHttpRequest' );
 	}
-
 
 	if (options.headers) {
 		for (var k2 in options.headers) {
