@@ -225,6 +225,15 @@ var $dialog = (function () {
 	 */
 	$dialog.prototype.then = function (callback) {
 		promiseCallback = callback;
+		return this;
+	}
+
+
+	/**
+	 *
+	 */
+	$dialog.prototype.getStatus = function (callback) {
+		return !!open;
 	}
 
 
