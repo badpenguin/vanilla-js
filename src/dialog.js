@@ -72,17 +72,28 @@ var $dialog = (function () {
 			// Events and callback
 			var self = this;
 
-			elDialogWindow.addEventListener('click',function(ev) {
+			/*elDialogWindow.addEventListener('click',function(ev) {
+				if ( ev.target !== ev.currentTarget ){
+					// user clicked on a child and we ignore that
+					console.log('return1');
+					return;
+				}
 				ev.preventDefault();
 				ev.stopPropagation();
-			});
+			});*/
 
 			elCloseButton.addEventListener('click',function(ev) {
+				ev.preventDefault();
+				ev.stopPropagation();
 				self.hide();
 			});
 
 			// Attach backgrop event
 			targetEl.addEventListener('click',function(ev){
+				// user clicked on a child and we ignore that
+				if ( ev.target !== ev.currentTarget ){
+					return;
+				}
 				ev.preventDefault();
 				if (!disableDismiss) {
 					self.hide();
@@ -187,6 +198,9 @@ var $dialog = (function () {
 		document.documentElement.style.scrollBehavior = oldBehavior;
 
 		$removeClass(targetEl,'open');
+
+		// Clear everything inside
+		$empty(elDialogInnerWindow);
 
 		// Callback
 		if (promiseCallback && $isFunction(promiseCallback)) {
