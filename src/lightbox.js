@@ -59,7 +59,7 @@ function $lightbox(mainSelector, childSelector) {
 
 		$prependHead(
 			'<style id="lightbox-inline-css">' +
-			'.lightbox-modal{position:fixed;top:0;left:0;width:100%;height:100%;background:#000;z-index:2;pointer-events:none;opacity:0;transform:scale(0);transition:opacity .4s ease-in-out, transform .3s ease-in-out;}' +
+			'.lightbox-modal{position:fixed;top:0;left:0;width:100%;height:100%;background:#000;z-index:101;pointer-events:none;opacity:0;transform:scale(0);transition:opacity .4s ease-in-out, transform .3s ease-in-out;}' +
 			'.lightbox-modal.lightbox-modal--open{pointer-events:auto;display:block;opacity:1;transform:scale(1);}' +
 			'.lightbox-modal img{position:absolute;top:0;left:0;right:0;bottom:0;width:100%;height:100vh;object-fit:contain;opacity:0;transition:all .4s ease-in-out}' +
 			'.lightbox-close{position:absolute;top:10px;right:10px;font-size:3rem;cursor:pointer;}' +
