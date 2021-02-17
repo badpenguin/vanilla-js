@@ -147,7 +147,7 @@ function $onLoad(callback) {
 
 /**
  * Generate an Event
- * @param {HTMLElement|string|null} el
+ * @param {HTMLElement|HTMLDocument|string|null} el
  * @param {string} stEventName
  */
 function $triggerEvent(el, stEventName) {
