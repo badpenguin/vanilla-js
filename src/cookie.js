@@ -8,6 +8,9 @@
 
 // https://plainjs.com/javascript/utilities/set-cookie-get-cookie-and-delete-cookie-5/
 function getCookie(name) {
+	if (!document.cookie) {
+		return null;
+	}
 	var v = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
 	return v ? v[2] : null;
 }
@@ -16,6 +19,10 @@ function getCookie(name) {
 function setCookie(name, value, days) {
 	var d = new Date;
 	d.setTime(d.getTime() + (86400 * 1000 * days) );
+	if (!document.cookie) {
+		console.error('cookies not availables');
+		return;
+	}
 	document.cookie = name + "=" + value + ";path=/;expires=" + d.toGMTString();
 }
 
