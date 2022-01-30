@@ -1,13 +1,14 @@
 /**
- * I tried first the url below but it was too complicated:
+ * I tried first the url below, but it was too complicated:
  * https://css-tricks.com/prevent-page-scrolling-when-a-modal-is-open/
  *
  * I prefer to use touch-action that already solved the problem in Android/Chrome but not in Safari
  */
 
+
 function $disableScreenScrolling() {
 	document.body.style.touchAction = 'none';
-	$addClass(document.body, 'bp-disable-scroll');
+	$addClass(document.body, 'bp-disable-scroll'); // See Vanilla-css for this
 }
 
 
@@ -27,29 +28,42 @@ function $lightbox(mainSelector, childSelector) {
 	var self = {};
 
 	// semaphore
+	/** @type {boolean} */
 	self.initialized = false;
+	/** @type {string|null} */
 	self.modalId = null;
 
 	// HTMLelement cache
+	/** @type {HTMLElement} */
 	self.modal = null;
+	/** @type {HTMLElement} */
 	self.modalImage1 = null;
+	/** @type {HTMLElement} */
 	self.modalImage2 = null;
+	/** @type {HTMLElement} */
 	self.modalCaption = null;
+	/** @type {HTMLElement} */
 	self.modalNext = null;
+	/** @type {HTMLElement} */
 	self.modalPrev = null;
+	/** @type {HTMLElement} */
 
 	// list of images
+	/** @type {string[][]} */
 	self.images = [];
 	// current index in self.images
+	/** @type {int} */
 	self.currentIndex = 0;
 	// gallery mode or single mode: hide nav arrows
+	/** @type {boolean} */
 	self.singleMode = false;
 	// flag if is open or not
+	/** @type {boolean} */
 	self.isOpen = false;
 
 
 	/**
-	 * Insert the common CSS after the HEAD and before the stylesheet, this way you can customized it with your own style.css
+	 * Insert the common CSS after the HEAD and before the stylesheet, this way you can customize it with your own style.css
 	 */
 	self.insertCss = function () {
 
@@ -175,7 +189,7 @@ function $lightbox(mainSelector, childSelector) {
 				return;
 			}
 
-			// Sorry, i don't want you to save my images
+			// Sorry, I don't want you to save my images
 			if (key === 's' && ev.ctrlKey === true) {
 				ev.preventDefault();
 				ev.stopImmediatePropagation();
@@ -304,7 +318,7 @@ function $lightbox(mainSelector, childSelector) {
 
 
 	/**
-	 * Build the array with the images's url and captions
+	 * Build the array with the url and captions of each image
 	 */
 	self.checkImages = function () {
 
@@ -341,7 +355,7 @@ function $lightbox(mainSelector, childSelector) {
 
 
 	/**
-	 * Load the image with the given index from self.images
+	 * Load the image with the given index from "self.images"
 	 * @param {number} index
 	 */
 	self.switchImage = function (index) {
@@ -349,8 +363,11 @@ function $lightbox(mainSelector, childSelector) {
 		self.currentIndex = index;
 
 		// Set the other image
-		var newImage = null;
-		var oldImage = null;
+		/** @type {HTMLElement} */
+		var newImage;
+		/** @type {HTMLElement} */
+		var oldImage;
+		/** @type {int} */
 		var activeImage = self.currentIndex % 2;
 		if (activeImage === 0) {
 			newImage = self.modalImage1;
@@ -367,6 +384,7 @@ function $lightbox(mainSelector, childSelector) {
 		// Load new image
 		newImage.src = self.images[index][0];
 
+		/** @type {string} */
 		var caption = self.images[index][1];
 		if (caption) {
 			newImage.setAttribute('title', caption);
@@ -404,6 +422,7 @@ function $lightbox(mainSelector, childSelector) {
 
 
 	self.preloadImages = function () {
+		/** @type {array} */
 		var filteredList = self.images.map(function (v) {
 			return v[0];
 		}).unique().slice(1);
@@ -434,6 +453,7 @@ function $lightbox(mainSelector, childSelector) {
 	 */
 	self.next = function () {
 		if (!self.singleMode) {
+			/** @type {int} */
 			var i = self.currentIndex + 1;
 			if (i < self.images.length) {
 				return self.switchImage(i);
@@ -448,6 +468,7 @@ function $lightbox(mainSelector, childSelector) {
 	 */
 	self.prev = function () {
 		if (!self.singleMode) {
+			/** @type {int} */
 			var i = self.currentIndex - 1;
 			if (i >= 0) {
 				return self.switchImage(i);
@@ -463,6 +484,7 @@ function $lightbox(mainSelector, childSelector) {
 	 * @returns {boolean|number}
 	 */
 	self.detectUrl = function (el) {
+		/** @type {string} */
 		var url = el.getAttribute('data-src') || el.getAttribute('href') || el.getAttribute('src');
 
 		for (var index = 0; index < self.images.length; index++) {
@@ -495,11 +517,13 @@ function $lightbox(mainSelector, childSelector) {
 		// In single mode it is found in the mainSelector
 		// In gallery mode we need to walk the nodeTree to find the correct URL of the clicked child
 
+		/** @type {HTMLElement} */
 		var clickedElement = ev.target;
+		/** @type {int} */
 		var index = self.detectUrl(clickedElement);
 		while (index === false) {
 
-			// Abort if its the last checked element is the mainSelector, there is no reason to go upper then it
+			// Abort if it's the last checked element is the mainSelector, there is no reason to go upper then it
 			if (clickedElement.matches(mainSelector)) {
 				console.warn('$lightbox: clicked element url not found in main selector');
 				return;

@@ -1,14 +1,23 @@
+/**
+ *
+ * @param {int} offset
+ */
 function $scrollDetector(offset) {
 
-	var lastPosition = window.pageYOffset;
+	/** @type {int} */
+	var lastPosition = $windowScrollTop();
 	//var offset = 100;
+	/** @type {string} */
 	var lastEvent = '';
 	offset = offset ? offset : 100;
 
 	document.addEventListener('scroll', function () {
-		var currentPosition = window.pageYOffset;
+		/** @type {int} */
+		var currentPosition = $windowScrollTop();
+		/** @type {int} */
 		var delta = Math.abs(currentPosition - lastPosition);
 		if (delta > offset) {
+			/** @type {string} */
 			var direction = currentPosition > lastPosition ? 'down' : 'up';
 			lastPosition = currentPosition;
 			// Generate Event
@@ -20,13 +29,18 @@ function $scrollDetector(offset) {
 			return doScrollEvent('top');
 		}
 		// Hit the bottom
+		/** @type {int} */
 		var documentHeight = (document.height !== undefined) ? document.height : document.body.offsetHeight;
-		if (window.pageYOffset + window.innerHeight + offset > documentHeight) {
+		if ($windowScrollTop() + $windowHeight() + offset > documentHeight) {
 			lastPosition = currentPosition;
 			return doScrollEvent('bottom');
 		}
 	});
 
+	/**
+	 *
+	 * @param {string} eventName
+	 */
 	function doScrollEvent(eventName) {
 		if (lastEvent === eventName) {
 			return;
@@ -38,11 +52,14 @@ function $scrollDetector(offset) {
 }
 
 
-/*
+/**
  * From: https://developers.facebook.com/docs/facebook-pixel/advanced/
+ * @param {string} selector
+ * @param {function} callback
  */
 function $scrollOnVisible(selector, callback) {
 
+	/** @type {HTMLElement} */
 	var dom_element = $one(selector);
 
 	if (!(dom_element instanceof HTMLElement)) {
@@ -53,13 +70,19 @@ function $scrollOnVisible(selector, callback) {
 		console.error('Second parameter must be a function, got', typeof callback, 'instead');
 	}
 
-	function isOnViewport(elem) {
-		var rect = elem.getBoundingClientRect();
+	/**
+	 *
+	 * @param {HTMLElement} el
+	 * @returns {boolean}
+	 */
+	function isOnViewport(el) {
+		/** @type {DOMRect} */
+		var rect = el.getBoundingClientRect();
 		var docElem = document.documentElement;
 		return (
 			rect.top >= 0 &&
 			rect.left >= 0 &&
-			rect.bottom <= (window.innerHeight || docElem.clientHeight) &&
+			rect.bottom <= $windowHeight() &&
 			rect.right <= (window.innerWidth || docElem.clientWidth)
 		);
 	}
@@ -78,8 +101,10 @@ function $scrollOnVisible(selector, callback) {
 }
 
 
-/*
+/**
  * From: https://developers.facebook.com/docs/facebook-pixel/advanced/
+ * @param {int} percentage
+ * @param {function} callback
  */
 function $scrollOnPageLenght(percentage, callback) {
 
@@ -92,6 +117,10 @@ function $scrollOnPageLenght(percentage, callback) {
 		);
 	}
 
+	/**
+	 *
+	 * @returns {number}
+	 */
 	function getDocumentLength() {
 		var D = document;
 		return Math.max(
@@ -104,33 +133,35 @@ function $scrollOnPageLenght(percentage, callback) {
 		);
 	}
 
-	function getWindowLength() {
-		return window.innerHeight || (document.documentElement || document.body).clientHeight;
-	}
 
+	/**
+	 *
+	 * @returns {number}
+	 */
 	function getScrollableLength() {
-		if (getDocumentLength() > getWindowLength()) {
-			return getDocumentLength() - getWindowLength();
+		if (getDocumentLength() > $windowHeight()) {
+			return getDocumentLength() - $windowHeight();
 		} else {
 			return 0;
 		}
 	}
 
+	/** @type {int} */
 	var scrollableLength = getScrollableLength();
 
 	window.addEventListener('resize', function () {
 		scrollableLength = getScrollableLength();
 	}, false)
 
-	function getCurrentScrolledLengthPosition() {
-		return window.pageYOffset || (document.documentElement || document.body.parentNode || document.body).scrollTop;
-	}
-
+	/**
+	 *
+	 * @returns {number}
+	 */
 	function getPercentageScrolled() {
 		if (scrollableLength === 0) {
 			return 100;
 		} else {
-			return getCurrentScrolledLengthPosition() / scrollableLength * 100;
+			return $windowScrollTop() / scrollableLength * 100;
 		}
 	}
 
@@ -144,7 +175,7 @@ function $scrollOnPageLenght(percentage, callback) {
 		};
 	})();
 
-	if (getDocumentLength() === 0 || (getWindowLength() / getDocumentLength() * 100 >= percentage)) {
+	if (getDocumentLength() === 0 || ($windowHeight() / getDocumentLength() * 100 >= percentage)) {
 		callback();
 	} else {
 		window.addEventListener('scroll', executeCallback, false);

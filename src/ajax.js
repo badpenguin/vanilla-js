@@ -30,8 +30,13 @@ var $ajax = function (method, url, options, callback) {
 		request.withCredentials = options.withCredentials;
 	}
 
+	/** @type {string|null} */
 	var data = options.data || null;
+
+	/** @type {boolean} */
 	var has_debug = options.debug || false;
+
+	/** @type {XMLHttpRequestResponseType} */
 	var responseType = options.responseType || false;
 
 
@@ -84,7 +89,6 @@ var $ajax = function (method, url, options, callback) {
 
 	if (options.onprogress) {
 		if (getObject(request, 'upload.onprogress')) {
-			console.warn('hook upload'); // TODO
 
 			request.upload.onprogress = function (pev) {
 				var perc = Math.round((pev.loaded / pev.total) * 100);
@@ -110,6 +114,8 @@ var $ajax = function (method, url, options, callback) {
 		if (has_debug) {
 			console.log('[$ajax] onload', request.status, request.statusText);
 		}
+
+		/** @type {boolean} */
 		var success = request.status>=200 && request.status<300;
 
 		var final = {

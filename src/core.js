@@ -49,7 +49,7 @@ var $all = document.querySelectorAll.bind(document);
  * Search inside an element
  * @param {HTMLElement} el
  * @param {string} selector
- * @returns {*}
+ * @returns {NodeList}
  */
 function $find(el, selector) {
 	return el.querySelectorAll(selector);
@@ -64,8 +64,9 @@ function $find(el, selector) {
  * NodeList.values()
  */
 
+
 /**
- * Add the "first" method to the nodelist (used by lightbox)
+ * Add the "first" method to the NodeList (used by lightbox)
  * @returns {Node}
  */
 NodeList.prototype.first = function () {
@@ -75,18 +76,19 @@ NodeList.prototype.first = function () {
 
 /**
  * Process NodeList "each"
- * Todd Motto's suggests to avoid using [].forEach.call(...)
+ * Todd Motto's suggests avoiding using [].forEach.call(...)
  * https://ultimatecourses.com/blog/ditch-the-array-foreach-call-nodelist-hack
+ * NOTE: except IE11 its now supported everywhere
  */
 /**
- * @param {array} array
+ * @param {NodeList} list
  * @param {function} callback
- * @param scope
+ * @param [scope]
  */
-var $forEach = function (array, callback, scope) {
-	for (var i = 0; i < array.length; i++) {
+var $forEach = function (list, callback, scope) {
+	for (var i = 0; i < list.length; i++) {
 		//callback.call(scope, i, array[i]);
-		callback.call(scope, array[i], i);
+		callback.call(scope, list[i], i);
 	}
 };
 
@@ -96,12 +98,12 @@ var $forEach = function (array, callback, scope) {
  * @param {function} callback
  */
 var $allEach = function (selector, callback) {
-	var el = $all(selector);
-	if (!el) {
+	var list = $all(selector);
+	if (!list) {
 		console.warn('$allEach selector not found');
 		return false;
 	}
-	$forEach(el, callback);
+	list.forEach(callback);
 }
 
 
@@ -147,10 +149,11 @@ function $onLoad(callback) {
 
 /**
  * Generate an Event
- * @param {HTMLElement|HTMLDocument|string|null} el
+ * @param {HTMLElement|Document|string|null} el
  * @param {string} stEventName
  */
 function $triggerEvent(el, stEventName) {
+	/** @type {HTMLElement|Document} */
 	var htmlElement;
 	if (el === null) {
 		htmlElement = window.document;
@@ -158,30 +161,28 @@ function $triggerEvent(el, stEventName) {
 		htmlElement = el;
 	} else if (typeof el === 'string' || el instanceof String) {
 		htmlElement = $one(el);
-	} else if (el instanceof HTMLDocument) {
+	} else if (el instanceof Document) {
 		htmlElement = el;
 	} else {
 		console.error('$triggerEvent invalid element', el, stEventName);
 		return false;
 	}
 
-	var event = document.createEvent('HTMLEvents'); // OLD: Event
-	event.initEvent(stEventName, true, true);
+	// initEvent is deprectated
+	//var event = document.createEvent('HTMLEvents'); // OLD: Event
+	//event.initEvent(stEventName, true, true);
+	var event = new Event(stEventName, {
+		bubbles: true,
+		cancelable: true
+	});
+
 	htmlElement.dispatchEvent(event);
+
 }
 
 
 // TODO: mouse click => https://gomakethings.com/how-to-simulate-a-click-event-with-javascript/
 
-/** TODO: custom event
-if (window.CustomEvent && typeof window.CustomEvent === 'function') {
-  var event = new CustomEvent('my-event', {detail: {some: 'data'}});
-} else {
-  var event = document.createEvent('CustomEvent');
-  event.initCustomEvent('my-event', true, true, {some: 'data'});
-}
-el.dispatchEvent(event);
- */
 
 
 /**
@@ -353,6 +354,7 @@ function $toggleClass(el, StClass) {
 /**
  *
  * @param {HTMLElement} el
+ * @returns {boolean}
  */
 function $hide(el) {
 	if (el) {
@@ -367,6 +369,7 @@ function $hide(el) {
  *
  * @param {HTMLElement} el
  * @param {string} [displayType]
+ * @returns {boolean}
  */
 function $show(el, displayType) {
 	if (el) {
@@ -377,11 +380,13 @@ function $show(el, displayType) {
 }
 
 
-// TODO: height => parseFloat(getComputedStyle(el, null).height.replace("px", ""))
-// TODO: width => parseFloat(getComputedStyle(el, null).width.replace("px", ""))
-// TODO: offset => var rect = el.getBoundingClientRect(); {
-//          top: rect.top + document.body.scrollTop,
+/* TODO:
+//  height => parseFloat(getComputedStyle(el, null).height.replace("px", ""))
+//  width => parseFloat(getComputedStyle(el, null).width.replace("px", ""))
+//  offset => var rect = el.getBoundingClientRect(); {
+//          top: rect.top + $windowScrollTop(),
 //          left: rect.left + document.body.scrollLeft
+*/
 
 
 /*
@@ -401,10 +406,14 @@ function $empty(el) {
 }
 
 
-// TODO: $after = target.insertAdjacentElement('afterend', element);
-// TODO: parent.appendChild(el);
-// TODO: $before = target.insertAdjacentElement('beforebegin', element);
-// TODO: $remove itself = el.parentNode.removeChild(el);
+/*
+ * TODO:
+//  $after = target.insertAdjacentElement('afterend', element);
+//  parent.appendChild(el);
+//  $before = target.insertAdjacentElement('beforebegin', element);
+//  $remove itself = el.parentNode.removeChild(el);
+
+ */
 
 /**
  * Append a new option to a select
@@ -457,7 +466,7 @@ Array.prototype.unique = function () {
 /**
  * Remove duplicate items from an array
  * https://vanillajstoolkit.com/helpers/dedupe/
- * @returns {*[]}
+ * @returns {array}
  */
 Array.prototype.unique = function () {
 	return this.filter(function (item, index, self) {
@@ -482,7 +491,7 @@ function getObject(obj, key) {
 /**
  *
  * @param {Object} value
- * @returns {boolean|boolean}
+ * @returns {boolean}
  */
 function isObject(value) {
 	return value != null && typeof value == 'object';
@@ -491,9 +500,15 @@ function isObject(value) {
 
 /**
  *
- * @param {function} value
+ * @param {function} callback
  * @returns {boolean}
  */
-function isFunction(value) {
-	return typeof value == 'function'
+function isFunction(callback) {
+	//return typeof callback == 'function'
+	/**
+	 * https://stackoverflow.com/questions/5999998/check-if-a-variable-is-of-function-type/6000009
+	 * return callback && {}.toString.call(callback) === '[object Function]';
+	 */
+	return callback && ( typeof callback == 'function' || {}.toString.call(callback) === '[object Function]' );
+
 }

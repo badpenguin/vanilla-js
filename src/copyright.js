@@ -11,7 +11,7 @@ function $copyright(title, callback) {
 		}
 	}
 
-	// Sorry, i really don't want right click on my website
+	// Sorry, I really don't want peoples to right-click on my website :-P
 	window.document.addEventListener('contextmenu', function (ev) {
 		ev.preventDefault();
 		self.notify();

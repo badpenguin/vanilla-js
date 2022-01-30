@@ -1,23 +1,43 @@
 /*
  * This is the old version of visibility that is prior the intersectionObservale
  * The trick is to check for object visiliby when scrolling
- * Of course its not efficient as the new version
- * but this one will allow to detect before entering the viewport
+ * Of course it's not efficient as the new version
+ * but this one will allow detecting before entering the viewport
  */
 
 
+/**
+ *
+ * @param {HTMLElement} el
+ * @param {number} easing
+ * @returns {boolean}
+ */
 function $inViewport(el, easing) {
 	var rect = el.getBoundingClientRect();
 	// NOTE: it checks only the vertical position not the horizontal
 	return (
 		rect.top >= 0 &&
-		(rect.top + easing ) <= (window.innerHeight || document.documentElement.clientHeight)
+		(rect.top + easing ) <= $windowHeight()
 	);
 }
 
 
+/**
+ *
+ * @returns {number}
+ */
 function $windowScrollTop() {
-	return window.scrollY || document.body.scrollTop || document.documentElement.scrollTop;
+	//noinspection JSDeprecatedSymbols
+	return window.pageYOffset || window.scrollY || document.body.scrollTop || document.documentElement.scrollTop;
+}
+
+
+/**
+ *
+ * @returns {number}
+ */
+function $windowHeight() {
+	return window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
 }
 
 
@@ -34,13 +54,14 @@ function $visibility(selector,options,callback) {
 
 	self.refreshList = function() {
 
-		var easing = self.options.easing ? self.options.easing : ((window.innerHeight || document.documentElement.clientHeight) * 0.05);
+		/** @type {number} */
+		var easing = self.options.easing ? self.options.easing : ($windowHeight() * 0.05);
 
-		$forEach(self.nodeList, function(el) {
+		self.nodeList.forEach(function(el) {
 
 			if ($inViewport(el, easing)) {
-				if (!el.hasAttribute('data-visibile')) {
-					el.setAttribute('data-visibile',true);
+				if (!el.hasAttribute('data-visible')) {
+					el.setAttribute('data-visible',true);
 					if (self.options.invisibleClass) {
 						$removeClass(el,self.options.invisibleClass);
 					}
@@ -53,8 +74,8 @@ function $visibility(selector,options,callback) {
 					}
 				}
 			} else {
-				if (el.hasAttribute('data-visibile')) {
-					el.removeAttribute('data-visibile');
+				if (el.hasAttribute('data-visible')) {
+					el.removeAttribute('data-visible');
 					if (self.options.visibleClass) {
 						$removeClass(el, self.options.visibleClass);
 					}

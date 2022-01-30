@@ -1,4 +1,9 @@
-
+/**
+ *
+ * @param {HTMLElement} el
+ * @param {string} classes
+ * @returns {boolean}
+ */
 function $addClasses(el, classes) {
 	if (el) {
 		var list = classes.split(' ');
@@ -12,51 +17,35 @@ function $addClasses(el, classes) {
 }
 
 
-// FROM: https://gomakethings.com/how-to-get-the-closest-parent-element-with-a-matching-selector-using-vanilla-javascript/
 /**
- * @param {HTMLElement} elem
+ * FROM: https://gomakethings.com/how-to-get-the-closest-parent-element-with-a-matching-selector-using-vanilla-javascript/
+ * and https://gomakethings.com/a-native-vanilla-javascript-way-to-get-the-closest-matching-parent-element/
+ * @param {HTMLElement} el
  * @param {string} selector
- * @returns {null|Node}
+ * @returns {null|HTMLElement}
  */
-var $closest = function (elem, selector) {
+var $closest = function (el, selector) {
 
-	// Element.matches() polyfill
-	if (!Element.prototype.matches) {
-		//noinspection JSUnresolvedVariable
-		Element.prototype.matches =
-			Element.prototype.matchesSelector ||
-			Element.prototype.mozMatchesSelector ||
-			Element.prototype.msMatchesSelector ||
-			Element.prototype.oMatchesSelector ||
-			Element.prototype.webkitMatchesSelector ||
-			function (s) {
-				var matches = (this.document || this.ownerDocument).querySelectorAll(s),
-					i = matches.length;
-				//eslint-disable-next-line no-empty
-				while (--i >= 0 && matches.item(i) !== this) {
-				}
-				return i > -1;
-			};
+	if (window.Element && Element.prototype.closest) {
+		return el.closest(selector);
 	}
 
+	/** @type {HTMLElement|Node} */
+	var loop = el;
+
 	// Get the closest matching element
-	for (; elem && elem !== document; elem = elem.parentNode) {
-		if (elem.matches(selector)) return elem;
+	for (; loop && loop !== document; loop = loop.parentNode) {
+		if (loop.matches(selector)) {
+			return loop;
+		}
 	}
 	return null;
 
 };
 
-// Polyfill
-if (!Array.isArray) {
-	//noinspection JSValidateTypes
-	Array.isArray = function (arg) {
-		return Object.prototype.toString.call(arg) === '[object Array]';
-	};
-}
 
-
-/*var $isNodelist = function(value) {
+/*
+var $isNodelist = function(value) {
 	if (typeof value.length == 'number'
 		&& typeof value.item == 'function'
 		&& typeof value.nextNode == 'function'
@@ -65,16 +54,17 @@ if (!Array.isArray) {
 		return true;
 	}
 	return false;
-}*/
+}
+*/
 
 
 /**
- * @param {Function} func
+ * @param {Function} callback
  * @param {number} wait
  * @param {boolean} immediate
  * @returns {function(): void}
  */
-function $debounce(func, wait, immediate) {
+function $debounce(callback, wait, immediate) {
 	immediate = (typeof immediate !== 'undefined') ? immediate : false;
 	wait = wait || 20;
 	var timeout = null;
@@ -85,14 +75,14 @@ function $debounce(func, wait, immediate) {
 		var later = function () {
 			timeout = null;
 			if (!immediate) {
-				func.apply(context, args);
+				callback.apply(context, args);
 			}
 		};
 		var callNow = immediate && !timeout;
 		clearTimeout(timeout);
 		timeout = setTimeout(later, wait);
 		if (callNow) {
-			func.apply(context, args);
+			callback.apply(context, args);
 		}
 	};
 }
@@ -131,7 +121,8 @@ function $scrollIntoView(el, offset) {
 		var box = el.getBoundingClientRect();
 		var body = document.body;
 		var docEl = document.documentElement;
-		var scrollTop = window.pageYOffset || docEl.scrollTop || body.scrollTop;
+		//noinspection JSDeprecatedSymbols
+		var scrollTop = $windowScrollTop();
 		var clientTop = docEl.clientTop || body.clientTop || 0;
 		var top = box.top + scrollTop - clientTop;
 		// Remove offset
@@ -156,6 +147,7 @@ function $scrollIntoView(el, offset) {
 
 
 /**
+ * Return an object with all the values of a form
  * @param {HTMLFormElement} form
  * @returns {object}
  */
@@ -166,7 +158,7 @@ function $formValues(form) {
 		if (!el.name) {
 			continue;
 		}
-		// TODO: checkbox multiple is not supported
+		// TODO: checkbox with "multiple" is not supported yet
 		if (el.type === 'checkbox' || el.type === 'radio') {
 			if (!el.checked) {
 				if (!r.hasOwnProperty(el.name)) {
@@ -184,6 +176,7 @@ function $formValues(form) {
 function $isString(value) {
 	return (typeof value === 'string') || (value instanceof String);
 }
+
 
 /*
  * ============== Functions Used In Form Validation ===========
@@ -234,11 +227,16 @@ function $formFieldLength(min, max, value) {
 }
 
 
+/**
+ * Usage: $formFieldEmail.bind(this)
+ * @param {string} value
+ * @returns {string|boolean}
+ */
 function $formFieldEmail(value) {
 	if (!$isString(value)) {
 		return 'Tipo di dato non valido';
 	}
-	var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+	var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 	if (re.test(String(value).toLowerCase())) {
 		return true;
 	}
@@ -265,23 +263,7 @@ function $formDecorateFieldAsNumeric(selector, pattern) {
 
 	// With Decimal
 	pattern = pattern || '[0-9.+-]';
-	var rule = new RegExp(pattern);
-
-	// Attach event handler
-	$on(field, 'keypress', function (ev) {
-		// Handle paste
-		if (ev.type === 'paste') {
-			key = (event.clipboardData || window.clipboardData).getData('text/plain');
-		} else {
-			// Handle key press
-			var key = ev.keyCode || ev.which;
-			key = String.fromCharCode(key);
-		}
-		if (!rule.test(key)) {
-			ev.returnValue = false;
-			if (ev.preventDefault) ev.preventDefault();
-		}
-	});
+	$formFieldAttachKeypressNumericalHandler(field, pattern);
 
 }
 
@@ -294,13 +276,27 @@ function $formDecorateFieldAsPhone(selector, pattern) {
 	var field = $one(selector);
 
 	// With Decimal
-	pattern = pattern || '[0-9+]';
+	pattern = pattern || '[0-9.+-]';
+	$formFieldAttachKeypressNumericalHandler(field, pattern);
+
+
+}
+
+
+/**
+ * Shared code by .$formDecorateFieldAsNumeric and $formDecorateFieldAsPhone
+ * @param {string} name
+ * @param {string} pattern
+ */
+function $formFieldAttachKeypressNumericalHandler(name, pattern) {
+
 	var rule = new RegExp(pattern);
 
 	// Attach event handler
-	$on(field, 'keypress', function (ev) {
+	$on(name, 'keypress', function (ev) {
 		// Handle paste
 		if (ev.type === 'paste') {
+			//noinspection JSDeprecatedSymbols
 			key = (event.clipboardData || window.clipboardData).getData('text/plain');
 		} else {
 			// Handle key press

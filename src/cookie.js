@@ -16,7 +16,7 @@ function getCookie(name) {
 function setCookie(name, value, days) {
 	var d = new Date;
 	d.setTime(d.getTime() + (86400 * 1000 * days) );
-	document.cookie = name + "=" + value + ";path=/;expires=" + d.toGMTString();
+	document.cookie = name + "=" + value + ";path=/;expires=" + d.toUTCString();
 }
 
 

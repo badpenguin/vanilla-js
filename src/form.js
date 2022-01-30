@@ -1,8 +1,11 @@
-// TODO: https://www.sitepoint.com/html5-forms-javascript-constraint-validation-api/
-// TODO: https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/HTML5/Constraint_validation
-// TODO: detect changes = https://stackoverflow.com/questions/3219758/detect-changes-in-the-dom
-// TODO: report validity polyfill = https://stackoverflow.com/questions/43665166/need-a-work-around-for-reportvalidity
-// TODO: form "onReset" event onReset
+/* TODO:
+//  https://www.sitepoint.com/html5-forms-javascript-constraint-validation-api/
+//  https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/HTML5/Constraint_validation
+//  detect changes = https://stackoverflow.com/questions/3219758/detect-changes-in-the-dom
+//  report validity polyfill = https://stackoverflow.com/questions/43665166/need-a-work-around-for-reportvalidity
+//  form "onReset" event onReset
+*/
+
 
 /**
  * @requires $alert
@@ -59,7 +62,7 @@ var $form = (function () {
 		/**
 		 *
 		 * @param {any} a
-		 * @param {any} b
+		 * @param {any} [b]
 		 */
 		function debug(a, b) {
 			if (!hasDebug) return;
@@ -104,7 +107,7 @@ var $form = (function () {
 
 			// Attach
 			if (!this) throw '$form: You forgot to use "new" to create the object';
-			if (!selector) throw '$form: You did not provide an element';
+			if (!selector) throw '$form: You did not provide any element';
 			targetEl = $one(selector);
 			if (!targetEl) throw '$form: element not found for: ' + selector;
 
@@ -150,7 +153,7 @@ var $form = (function () {
 			/*
 			 * initializeAllFieldElements(formElements);
 			 */
-			$forEach(formElements, function (el) {
+			formElements.forEach(function (el) {
 				debug('! initialize', el.name || el.id);
 
 				el.isDirty = false;
@@ -276,7 +279,7 @@ var $form = (function () {
 			var callbackList = validators[key];
 			for (var i = 0; i < callbackList.length; i++) {
 				var callbackFn = callbackList[i];
-				var el = this.getFieldObject(key);
+				//var el = this.getFieldObject(key);
 				var value = this.getFieldValue(key);
 				var r = callbackFn(value);
 				if (r !== true) {
@@ -290,6 +293,7 @@ var $form = (function () {
 
 
 		/**
+		 * Return a form elements by its name or id
 		 * @param {string} key
 		 * @returns {HTMLInputElement}
 		 */
@@ -449,6 +453,10 @@ var $form = (function () {
 		}
 
 
+		/**
+		 * @param {string} key
+		 * @returns {boolean}
+		 */
 		$form.prototype.validateField = function (key) {
 			// Loop
 			var r = this.checkField(key);

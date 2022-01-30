@@ -4,11 +4,18 @@ TODO: Better add <noscript><img></noscript> for SEO
 */
 
 
+/**
+ * @param {string} mainSelector
+ * @param {array} options
+ * @returns {boolean}
+ */
 function $lazyload(mainSelector, options) {
 
-// From https://corydowdy.com/blog/lazy-loading-images-with-intersection-observer
-// small polyfill for Microsoft Edge 15 isIntersecting property
-// see https://github.com/WICG/IntersectionObserver/issues/211#issuecomment-309144669
+	/*
+	 * From https://corydowdy.com/blog/lazy-loading-images-with-intersection-observer
+	 * small polyfill for Microsoft Edge 15 isIntersecting property
+	 * see https://github.com/WICG/IntersectionObserver/issues/211#issuecomment-309144669
+	 */
 	if ('IntersectionObserver' in window &&
 		'IntersectionObserverEntry' in window &&
 		'intersectionRatio' in window.IntersectionObserverEntry.prototype &&
@@ -16,6 +23,7 @@ function $lazyload(mainSelector, options) {
 
 		Object.defineProperty(window.IntersectionObserverEntry.prototype, 'isIntersecting', {
 			get: function () {
+				//noinspection JSUnresolvedVariable
 				return this.intersectionRatio > 0
 			}
 		})
@@ -28,7 +36,7 @@ function $lazyload(mainSelector, options) {
 		!('IntersectionObserverEntry' in window) ||
 		!('intersectionRatio' in window.IntersectionObserverEntry.prototype)) {
 		console.warn('$lazyload: not supported.');
-		return;
+		return false;
 	}
 
 	self.images = [];
@@ -45,10 +53,12 @@ function $lazyload(mainSelector, options) {
 	 */
 	self.preloadImage = function (el) {
 
+		/** @type {string} */
 		var url = el.getAttribute('data-src');
 		if (url) {
 			el.removeAttribute('data-src');
 			$addClass(el, 'lazyloading');
+			/** @type {HTMLElement} */
 			var target = el;
 			el.onload = function () {
 				$addClass(target, 'lazyloaded');
@@ -93,11 +103,17 @@ function $lazyload(mainSelector, options) {
 		}, intersectionConfig);
 
 		self.images = [];
+
+		/** @type {NodeList} */
 		var candidates = $all(mainSelector);
 
 		// Push in the meat
 		candidates.forEach(function (el) {
+
+			/** @type {Element} (el) */
+
 			if (self.options.cancelInitialLoad) {
+				/** @type {string} */
 				var url = el.getAttribute('src');
 				if (url) {
 					el.removeAttribute('src');
@@ -109,6 +125,7 @@ function $lazyload(mainSelector, options) {
 				el.src = 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';
 				$addClass(el, 'lazyloading');
 
+				/** @type {string} */
 				var srcset = el.getAttribute('srcset');
 				el.removeAttribute('srcset');
 				if (srcset) {
@@ -125,6 +142,7 @@ function $lazyload(mainSelector, options) {
 			$onLoad(function () {
 
 				self.images.forEach(function (el, index) {
+					/** @type {int} */
 					var timeout = (index + 2) * 1000;
 					setTimeout(function () {
 						self.preloadImage(el);
@@ -139,5 +157,6 @@ function $lazyload(mainSelector, options) {
 
 
 	// We don't have a public interface yet
-	return {};
+	//return {};
+	return true;
 }

@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 set -e
+set -x
 
 # Poor Man Builder
 #cat src/core.js src/lightbox.js > docs/vanilla-js.min.js

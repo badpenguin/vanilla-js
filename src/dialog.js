@@ -1,50 +1,75 @@
-/**
- * https://stackoverflow.com/questions/5999998/check-if-a-variable-is-of-function-type/6000009
- * @param {Function} callback
- */
-function $isFunction(callback) {
-	return callback && {}.toString.call(callback) === '[object Function]';
-}
-
 
 var $dialog = (function () {
 
 	'use strict';
 
+	/** @type {string} */
 	var selector = 'vanilla-dialog';
+
+	/** @type {HTMLElement} */
 	var targetEl = null;  // HTML DIV Element
+
+	/** @type {HTMLElement} */
 	var elDialogInnerWindow = null; // HTML DIV Element
+
+	/** @type {HTMLElement} */
 	var elCloseButton = null;
 
 	// Function
+	/** @type {function} */
 	var promiseCallback = null;
 
 	/** @type {boolean} */
 	var open = false;
-	var scrollPos = 0;
-	var oldScrollTop = '';
+
+	//var scrollPos = 0;
+
+	/** @type {number} */
+	var oldScrollTop = 0;
+
+	/** @type {string} */
 	var oldPosition = '';
+
+	/** @type {string} */
 	var oldWidth = '';
+
+	/** @type {string} */
 	var oldBehavior = '';
+
+	/** @type {boolean} */
 	var allowScroll = false;
 
 
 	/**
 	 *
-	 * @param {string} selector
 	 * @param {object} settings
 	 */
 	function $dialog(settings) {
 
 		// Configure
 		settings = settings || {};
+
+		/** @type {string} */
 		var title = settings.title || '';
+
+		/** @type {string} */
 		var className = settings.className || '';
+
+		/** @type {boolean} */
 		var disableDismiss = settings.disableDismiss || false;
+
+		/** @type {array} */
 		var buttons = Array.isArray(settings.buttons) ? settings.buttons : [];
+
+		/** @type {string} */
 		var content = settings.content || '';
+
+		/** @type {string} */
 		var spinner = settings.spinner || '';
+
+		/** @type {boolean} */
 		var disableClose = settings.disableClose || false;
+
 		promiseCallback = settings.promiseCallback || null;
 		allowScroll = !!settings.allowScroll;
 
@@ -161,7 +186,7 @@ var $dialog = (function () {
 					}
 				}
 				var btnLabel = btn.label || 'OK';
-				var btnClass = btn.className || (i == 0 ? 'btn--primary btn--large' : 'btn--secondary');
+				var btnClass = btn.className || (i === 0 ? 'btn--primary btn--large' : 'btn--secondary');
 				var btnValue = btn.value || btn.label;
 				// TODO: advanced callback
 
@@ -185,7 +210,7 @@ var $dialog = (function () {
 	 */
 	$dialog.prototype.hide = function (value) {
 		if (!open) {
-			console.debug('$dialog: already closed');
+			console.warn('$dialog: already closed');
 			return;
 		}
 		open = false;
@@ -206,7 +231,7 @@ var $dialog = (function () {
 		$empty(elDialogInnerWindow);
 
 		// Callback
-		if (promiseCallback && $isFunction(promiseCallback)) {
+		if (promiseCallback && isFunction(promiseCallback)) {
 			promiseCallback(value);
 		}
 
@@ -218,7 +243,7 @@ var $dialog = (function () {
 	 */
 	$dialog.prototype.show = function () {
 		if (open) {
-			console.debug('$dialog: already open');
+			console.warn('$dialog: already open');
 			return;
 		}
 		// DO THE SHOW
@@ -227,7 +252,7 @@ var $dialog = (function () {
 		$addClass(targetEl, 'open');
 		// Freeze Document
 		if (!allowScroll) {
-			oldScrollTop = window.scrollY || window.scrollTop || document.getElementsByTagName("html")[0].scrollTop;
+			oldScrollTop = $windowScrollTop();
 			oldPosition = document.body.style.position;
 			oldWidth = document.body.style.width;
 			oldBehavior = document.documentElement.style['scroll-behavior'];
@@ -251,7 +276,7 @@ var $dialog = (function () {
 	/**
 	 *
 	 */
-	$dialog.prototype.getStatus = function (callback) {
+	$dialog.prototype.getStatus = function () {
 		return !!open;
 	}
 
@@ -267,7 +292,7 @@ function $backDrop(content) {
 		content: content,
 		spinner: 'spinner2',
 		disableDismiss: true,
-		disableClose: true,
+		disableClose: true
 	});
 }
 
@@ -278,7 +303,7 @@ function $alert(title, content, button) {
 		title: title,
 		content: content,
 		buttons: [button],
-		className: 'dialog-backdrop--error',
+		className: 'dialog-backdrop--error'
 	});
 }
 
@@ -289,6 +314,6 @@ function $info(title, content, button) {
 		title: title,
 		content: content,
 		buttons: [button],
-		className: 'dialog-backdrop--info',
+		className: 'dialog-backdrop--info'
 	});
 }
