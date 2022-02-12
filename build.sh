@@ -16,6 +16,7 @@ closure-compiler \
     --js src/visibility.js \
     --js src/form-utils.js --js src/form.js \
     --js src/dialog.js \
+    --js src/sha256.js \
     --language_in ECMASCRIPT5 \
     --js_output_file docs/vanilla-js.min.js --create_source_map docs/vanilla-js.min.js.map
 
