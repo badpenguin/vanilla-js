@@ -29,3 +29,20 @@ function removeCookie(name) {
 	setCookie(name, '', -1);
 }
 
+
+/**
+ * @param {string} name
+ * @param {string} value
+ * @param {int} days
+ * @param {string} path
+ * @param {string} domain
+ * @param {boolean} secure
+ */
+function $setCookie(name, value, days, path, domain, secure) {
+	var d = new Date;
+	d.setTime(d.getTime() + (86400 * 1000 * days) );
+	document.cookie =
+		name + "=" + value + ";path="+path+";domain="+domain+
+		(secure?";secure":"")+
+		";expires=" + d.toGMTString();
+}

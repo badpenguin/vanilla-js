@@ -227,6 +227,7 @@ var $dialog = (function () {
 		$addClass(targetEl, 'open');
 		// Freeze Document
 		if (!allowScroll) {
+			// TODO: getElementsByTagName convert because in chrome 53 generates error
 			oldScrollTop = window.scrollY || window.scrollTop || document.getElementsByTagName("html")[0].scrollTop;
 			oldPosition = document.body.style.position;
 			oldWidth = document.body.style.width;

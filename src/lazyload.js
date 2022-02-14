@@ -6,6 +6,8 @@ TODO: Better add <noscript><img></noscript> for SEO
 
 function $lazyload(mainSelector, options) {
 
+// TODO: allow polifyll for everyone, not just me
+
 // From https://corydowdy.com/blog/lazy-loading-images-with-intersection-observer
 // small polyfill for Microsoft Edge 15 isIntersecting property
 // see https://github.com/WICG/IntersectionObserver/issues/211#issuecomment-309144669
