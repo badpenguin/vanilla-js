@@ -17,7 +17,7 @@ function $inViewport(el, easing) {
 	// NOTE: it checks only the vertical position not the horizontal
 	return (
 		rect.top >= 0 &&
-		(rect.top + easing ) <= $windowHeight()
+		(rect.top + easing) <= $windowHeight()
 	);
 }
 
@@ -41,7 +41,7 @@ function $windowHeight() {
 }
 
 
-function $visibility(selector,options,callback) {
+function $visibility(selector, options, callback) {
 
 	var self = {};
 
@@ -52,18 +52,18 @@ function $visibility(selector,options,callback) {
 	}, options);
 
 
-	self.refreshList = function() {
+	self.refreshList = function () {
 
 		/** @type {number} */
 		var easing = self.options.easing ? self.options.easing : ($windowHeight() * 0.05);
 
-		self.nodeList.forEach(function(el) {
+		self.nodeList.forEach(function (el) {
 
 			if ($inViewport(el, easing)) {
 				if (!el.hasAttribute('data-visible')) {
-					el.setAttribute('data-visible',true);
+					el.setAttribute('data-visible', true);
 					if (self.options.invisibleClass) {
-						$removeClass(el,self.options.invisibleClass);
+						$removeClass(el, self.options.invisibleClass);
 					}
 					//void element.offsetWidth;
 					if (self.options.visibleClass) {
@@ -80,7 +80,7 @@ function $visibility(selector,options,callback) {
 						$removeClass(el, self.options.visibleClass);
 					}
 					if (self.options.invisibleClass) {
-						$addClass(el,self.options.invisibleClass);
+						$addClass(el, self.options.invisibleClass);
 					}
 					if (callback) {
 						callback(el, false);
@@ -101,7 +101,7 @@ function $visibility(selector,options,callback) {
 	self.refreshList();
 
 	// if there are still node invisbile then start the show
-	if (self.nodeList.length>0) {
+	if (self.nodeList.length > 0) {
 		document.addEventListener('scroll', self.refreshList);
 	} else {
 		console.warn('$visibility: no hidden elements');
@@ -110,3 +110,4 @@ function $visibility(selector,options,callback) {
 	// No public interface yet
 	return {};
 }
+

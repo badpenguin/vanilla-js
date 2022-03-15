@@ -53,6 +53,16 @@ function $scrollDetector(offset) {
 
 
 /**
+ *
+ * @returns {number}
+ */
+function $windowWidth() {
+	return window.innerWidth || docElem.clientWidth;
+}
+
+
+
+/**
  * From: https://developers.facebook.com/docs/facebook-pixel/advanced/
  * @param {string} selector
  * @param {function} callback
@@ -83,7 +93,7 @@ function $scrollOnVisible(selector, callback) {
 			rect.top >= 0 &&
 			rect.left >= 0 &&
 			rect.bottom <= $windowHeight() &&
-			rect.right <= (window.innerWidth || docElem.clientWidth)
+			rect.right <= $windowWidth()
 		);
 	}
 
