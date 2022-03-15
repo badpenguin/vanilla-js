@@ -134,7 +134,7 @@ var $ajax = function (method, url, options, callback) {
 
 		// Parse our custom payload format, i.e. {error:0/1, message:'string', payload: object}
 		var payload = null;
-		if (final.hasOwnProperty('response') && final.response.hasOwnProperty('error') && final.response.hasOwnProperty('payload')) {
+		if (final.hasOwnProperty('response') && final.response && final.response.hasOwnProperty('error') && final.response.hasOwnProperty('payload')) {
 			payload = final.response.error===0 ? final.response.payload : false;
 		}
 
